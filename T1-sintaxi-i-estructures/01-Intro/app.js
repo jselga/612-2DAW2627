@@ -1,3 +1,4 @@
-console.log('Hola Món');
-// No funciona amb node, esta importanda al navegador
-//alert("Hola món");
+console.log('Hola classe 2DAW');
+
+//Alert NO funciona amb node, és una funció de navegador 
+// alert("Hola món");
