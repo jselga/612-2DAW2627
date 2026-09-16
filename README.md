@@ -6,8 +6,8 @@ Repositori amb el material, els exemples i els exercicis del mòdul 612.
 
 El mòdul s'organitzarà en els temes següents:
 
-- **Tema 1 - Sintaxi i estructures del llenguatge** · 42 h
-- **Tema 2 - Esdeveniments i model d'objectes del document** · 27 h
+- **Tema 1 - Sintaxi i estructures del llenguatge** · 
+- **Tema 2 - Esdeveniments i model d'objectes del document** · 
 - **Tema 3 - Comunicació asíncrona client-servidor i llibreries**
 
 ### Tema 1
