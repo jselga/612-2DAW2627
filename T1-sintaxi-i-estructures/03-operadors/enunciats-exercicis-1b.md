@@ -51,7 +51,7 @@ Necessitem determinar l'àrea d'una habitació per fer la compra d'un aire condi
 Les mides són: 4m de llargada 3.8 m d'ample.  
 Ara, depenent de l'àrea d'aquesta habitació s'haurà de determinar la quantitat de tones refrigerants de l'aparell. En concret farem avaluacions per a 1 tona, 1.5
 tones i 2 tones.   
-- On per a una habitació de 16m<sup>2</sup> requerirà màxim d'1 tona.
+- On per a una habitació de 15m<sup>2</sup> requerirà màxim d'1 tona.
 - Per 1.5 tones seria adequat per a habitacions de 15m<sup>2</sup> a 25m<sup>2</sup>.
 - I d'entre 25m<sup>2</sup> a 30m<sup>2</sup> correspondrà col·locar-ne un de 2 tones.  
 
