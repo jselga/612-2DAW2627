@@ -5,19 +5,23 @@ Cada secció inclou una explicació breu i, quan correspon, un exemple amb un en
 
 ## Índex
 
-- [Resum sobre operadors en JavaScript](#resum-sobre-operadors-en-javascript)
-  - [1. Declaracions, sentències i expressions](#1-declaracions-sentències-i-expressions)
-  - [2. Operadors aritmètics](#2-operadors-aritmètics)
-  - [3. Precedència i associativitat](#3-precedència-i-associativitat)
-  - [4. Operadors d'assignació](#4-operadors-dassignació)
-  - [5. Operadors de comparació](#5-operadors-de-comparació)
-  - [6. Operadors lògics](#6-operadors-lògics)
-  - [7. Valors truthy i falsy](#7-valors-truthy-i-falsy)
-  - [8. Avaluació de curt circuit](#8-avaluació-de-curt-circuit)
-  - [9. Operador ternari](#9-operador-ternari)
-  - [10. Operadors bit a bit](#10-operadors-bit-a-bit)
-  - [11. Exercicis](#11-exercicis)
-  - [12. Recursos](#12-recursos)
+- [Índex](#índex)
+- [1. Declaracions, sentències i expressions](#1-declaracions-sentències-i-expressions)
+- [2. Operadors aritmètics](#2-operadors-aritmètics)
+- [3. Precedència i associativitat](#3-precedència-i-associativitat)
+- [4. Operadors d'assignació](#4-operadors-dassignació)
+- [5. Operadors de comparació](#5-operadors-de-comparació)
+- [6. Operadors lògics](#6-operadors-lògics)
+- [7. Valors `truthy` i `falsy`](#7-valors-truthy-i-falsy)
+- [8. Avaluació de curt circuit](#8-avaluació-de-curt-circuit)
+  - [Operador `||`](#operador-)
+  - [Operador `&&`](#operador--1)
+  - [Operador `??`](#operador--2)
+- [9. Operador ternari](#9-operador-ternari)
+- [10. Operadors bit a bit](#10-operadors-bit-a-bit)
+- [11. Exercicis](#11-exercicis)
+- [12. Recursos](#12-recursos)
+  - [Referència oficial (MDN)](#referència-oficial-mdn)
 
 ---
 
@@ -160,7 +164,7 @@ Els operadors lògics permeten combinar o negar condicions:
 | Operador | Nom | Resultat general |
 | --- | --- | --- |
 | `&&` | AND lògic | `true` si les dues condicions són certes |
-| `||` | OR lògic | `true` si almenys una condició és certa |
+| `\|\| ` | OR lògic | `true` si almenys una condició és certa |
 | `!` | NOT lògic | Inverteix el valor booleà |
 
 ```js
