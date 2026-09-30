@@ -1,10 +1,10 @@
 // En el cas de les funcions contructores es fa servir UpperCamelCase amb el nom de la classe com en Java
 // {id:1, recuperarClau: function(){}}
-function Usuari(){
+function Usuari() {
     this.id = 1;                    //propietat
-    this.recuperarClau = function(){ // mètode
+    this.recuperarClau = function () { // mètode
         console.log('recuperant clau...');
-        
+
     }
 }
 // 1. Es crea un objecte literal {}
@@ -13,3 +13,5 @@ function Usuari(){
 // 4. retorna this
 let usuari = new Usuari();
 console.log(usuari);
+let manu = Usuari();
+console.log(manu);

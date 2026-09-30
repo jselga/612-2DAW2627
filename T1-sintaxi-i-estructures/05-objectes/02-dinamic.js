@@ -18,4 +18,5 @@ console.log(user);
 const user1 = Object.seal({id:1})
 user1.name='Nico';
 user1.id =2;
+user1.nickname='nsch4378';
 console.log(user1);
