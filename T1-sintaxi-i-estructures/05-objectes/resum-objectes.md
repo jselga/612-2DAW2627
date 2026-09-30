@@ -1,44 +1,46 @@
-# Resum sobre Objectes en JavaScript
+# Resum sobre objectes en JavaScript
 
-Aquest document és una **referència** sobre els objectes en JavaScript i els objectes natius del llenguatge.  
-Cada secció inclou: teoria + un petit exemple + enllaç al fitxer `.js` amb més proves.
+Aquest document és una **referència** sobre els objectes, les funcions i alguns objectes natius de JavaScript.
+Cada secció inclou una explicació breu, un exemple i un enllaç al fitxer `.js` corresponent.
 
 ## Índex
 
-- [Resum sobre Objectes en JavaScript](#resum-sobre-objectes-en-javascript)
-  - [Índex](#índex)
-  - [1. Concepte d’Objecte](#1-concepte-dobjecte)
+- [Resum sobre objectes en JavaScript](#resum-sobre-objectes-en-javascript)
+  - [1. Objectes literals](#1-objectes-literals)
   - [2. Objectes dinàmics](#2-objectes-dinàmics)
-  - [3. Funció Factory](#3-funció-factory)
-  - [4. Funció Constructor](#4-funció-constructor)
-  - [5. Dreceres d'objectes](#5-dreceres-dobjectes)
-  - [6. Funcions dins objectes](#6-funcions-dins-objectes)
-  - [7. Constructor Function](#7-constructor-function)
-  - [8. Referències](#8-referències)
-  - [9. Llistat de propietats](#9-llistat-de-propietats)
-  - [10. Clonació](#10-clonació)
-  - [11. Propietats privades i públiques](#11-propietats-privades-i-públiques)
+  - [3. Factory functions](#3-factory-functions)
+  - [4. Funcions constructores](#4-funcions-constructores)
+  - [5. Constructors natius i boxing](#5-constructors-natius-i-boxing)
+  - [6. Funcions com a objectes de primera classe](#6-funcions-com-a-objectes-de-primera-classe)
+  - [7. El constructor Function](#7-el-constructor-function)
+  - [8. Referències i còpia de valors](#8-referències-i-còpia-de-valors)
+  - [9. Propietats i mètodes](#9-propietats-i-mètodes)
+  - [10. Clonació d’objectes](#10-clonació-dobjectes)
+  - [11. Propietats públiques i privades](#11-propietats-públiques-i-privades)
   - [12. Objecte Math](#12-objecte-math)
   - [13. Objecte Date](#13-objecte-date)
   - [14. Objecte String](#14-objecte-string)
   - [15. Caràcters d’escapament](#15-caràcters-descapament)
-  - [16. Template Strings](#16-template-strings)
+  - [16. Template strings](#16-template-strings)
+  - [17. Exercicis](#17-exercicis)
+  - [18. Recursos](#18-recursos)
 
 ---
 
-## 1. Concepte d’Objecte
-Un objecte és una col·lecció de **propietats** (clau-valor).  
-Cada propietat pot ser un valor primitiu, un altre objecte o una funció (mètode).
+## 1. Objectes literals
+
+Un objecte és una col·lecció de propietats en forma de parelles **clau-valor**. Una propietat pot contenir un valor primitiu, un altre objecte o una funció. Quan una propietat conté una funció, parlem d’un **mètode**.
 
 ```js
-let persona = {
+const usuari = {
   nom: "Anna",
   edat: 25,
-  saluda: function() {
+  saluda() {
     console.log("Hola, sóc " + this.nom);
   }
 };
-persona.saluda(); // Hola, sóc Anna
+
+usuari.saluda();
 ```
 
 📄 Exemple: [01-intro.js](01-intro.js)
@@ -46,251 +48,353 @@ persona.saluda(); // Hola, sóc Anna
 ---
 
 ## 2. Objectes dinàmics
-Els objectes es poden crear de manera dinàmica amb `new Object()` i després afegint propietats.
+
+Podem afegir, modificar i eliminar propietats després de crear un objecte.
 
 ```js
-let usuari = new Object();
+const usuari = { id: 1 };
+
 usuari.nom = "Pere";
-usuari.edat = 30;
-console.log(usuari);
+usuari.actiu = true;
+delete usuari.actiu;
 ```
+
+`Object.freeze()` impedeix modificar un objecte. `Object.seal()` impedeix afegir-hi o eliminar-ne propietats, però permet modificar els valors existents.
 
 📄 Exemple: [02-dinamic.js](02-dinamic.js)
 
 ---
 
-## 3. Funció Factory
-Una **factory function** retorna objectes nous amb les propietats definides.
+## 3. Factory functions
+
+Una **factory function** és una funció que crea i retorna objectes nous. És útil quan volem repetir una mateixa estructura sense duplicar el codi.
 
 ```js
-function crearUsuari(nom, edat) {
-  return { nom, edat };
+function crearUsuari(nom, email) {
+  return {
+    nom,
+    email,
+    actiu: true
+  };
 }
-let u1 = crearUsuari("Anna", 22);
-console.log(u1);
+
+const usuari = crearUsuari("Anna", "anna@example.com");
 ```
 
 📄 Exemple: [03-factory.js](03-factory.js)
 
 ---
 
-## 4. Funció Constructor
-Amb les funcions constructores es poden crear instàncies noves amb `new`.
+## 4. Funcions constructores
+
+Una funció constructora permet crear instàncies amb l'operador `new`. Per convenció, el nom d'una funció constructora comença amb majúscula.
 
 ```js
 function Persona(nom, edat) {
   this.nom = nom;
   this.edat = edat;
 }
-let p1 = new Persona("Joan", 30);
-console.log(p1);
+
+const persona = new Persona("Joan", 30);
+console.log(persona);
 ```
+
+Quan s'utilitza `new`, JavaScript crea un objecte nou, el relaciona amb el prototip de la funció, assigna aquest objecte a `this` i el retorna, tret que el constructor retorni explícitament un altre objecte.
 
 📄 Exemple: [04-constructor.js](04-constructor.js)
 
 ---
 
-## 5. Dreceres d'objectes
-JavaScript ofereix diverses utilitats per gestionar propietats.
+## 5. Constructors natius i boxing
 
-- `this`: fa referència a l’objecte actual.  
-- `in`: comprova si existeix una propietat.  
-- `hasOwnProperty`: comprova si la propietat és pròpia de l’objecte.
+Els literals són la forma habitual de crear valors i objectes:
 
 ```js
-let persona = { nom: "Anna" };
-console.log("nom" in persona);          // true
-console.log(persona.hasOwnProperty("nom")); // true
+const obj = {};
+const text = "Hola";
+const nombre = 4;
 ```
-Quan declarem objectes sense la paraula `new` JS ho interpreta com si ho fèssim. És per això que podem fer servir els mètodes de l'objecte com `length` en una string declarada com:
+
+També existeixen constructors natius com `Object`, `Array`, `String`, `Number` i `Boolean`, però normalment no cal utilitzar-los directament.
+
+Els valors primitius poden utilitzar mètodes perquè JavaScript els embolcalla temporalment amb un objecte (**boxing**):
+
 ```js
-let paraula ="Hola"
-paraula.length // 4
+const nombre = 4;
+console.log(nombre.toString()); // "4"
+console.log("Hola".length);     // 4
 ```
+
+Els objectes `new String()`, `new Number()` i `new Boolean()` no són equivalents als primitius i poden provocar comparacions inesperades. En general, cal preferir els literals.
+
 📄 Exemple: [05-dreceres.js](05-dreceres.js)
 
 ---
 
-## 6. Funcions dins objectes
-Les propietats també poden ser funcions, anomenades **mètodes**.
+## 6. Funcions com a objectes de primera classe
+
+Les funcions són valors de primera classe. Es poden assignar a variables, passar com a arguments i retornar des d'una altra funció.
 
 ```js
-let cotxe = {
-  marca: "Toyota",
-  arrenca: function() {
-    console.log("Brrrum!");
-  }
-};
-cotxe.arrenca();
+function saluda(nom) {
+  console.log(`Hola, ${nom}`);
+}
+
+const funcio = saluda;
+funcio("Anna");
+
+function crearSalutacio() {
+  return function () {
+    console.log("Hola món");
+  };
+}
 ```
-També podem passar una funció com argument d'una altra funció
 
 📄 Exemple: [06-funcions.js](06-funcions.js)
 
 ---
 
-## 7. Constructor Function
-També és possible crear funcions amb el constructor integrat `Function`.
+## 7. El constructor `Function`
+
+El constructor `Function` permet crear una funció a partir de cadenes de text:
 
 ```js
-let suma = new Function("a", "b", "return a + b");
-console.log(suma(2,3)); // 5
+const suma = new Function("a", "b", "return a + b");
+console.log(suma(2, 3)); // 5
 ```
-⚠️ Nota important sobre new Function
 
-Tot i que new Function(...) permet crear funcions a partir de cadenes de text, no es recomana utilitzar-lo habitualment per aquests motius:
+No es recomana utilitzar-lo habitualment perquè és semblant a `eval`: pot executar codi no segur, dificulta la lectura i només té accés a l'àmbit global. És preferible declarar les funcions amb la sintaxi normal.
 
-**Seguretat**: és equivalent a fer servir eval, i pot executar codi maliciós si la cadena prové de l’usuari.  
-**Rendiment**: el motor de JavaScript ha de compilar la cadena a codi cada vegada.  
-**Limitacions** de l’àmbit (scope): les funcions creades amb new Function només tenen accés a les variables globals, no al context local.  
-**Mantenibilitat**: barrejar codi dins de cadenes dificulta la lectura i el depurat.  
-És millor evitar-lo per seguretat, rendiment i claredat de codi   
-📄 Exemple: [07-Function.js](07-Function.js)
+📄 Exemple: [07-function.js](07-function.js)
 
 ---
 
-## 8. Referències
-Els objectes en JavaScript no es copien en assignar-los, sinó que es passa una **referència** a la mateixa zona de memòria.
-Això vol dir que si dues variables apunten al mateix objecte, un canvi en una també es veurà reflectit en l’altra.
+## 8. Referències i còpia de valors
+
+Els valors primitius es copien per valor:
 
 ```js
-let a = {x: 1};
+let a = 1;
 let b = a;
-b.x = 2;
-console.log(a.x); // 2
-console.log(b.x); // 2
+b++;
+
+console.log(a); // 1
+console.log(b); // 2
 ```
-En canvi, els **valors primitius** (number, string, boolean, null, undefined, symbol, bigint) sí que es copien per **valor**:
+
+Quan assignem un objecte a una altra variable, es copia el valor de la referència. Les dues variables apunten al mateix objecte:
+
+```js
+const original = { valor: 1 };
+const copia = original;
+
+copia.valor = 2;
+console.log(original.valor); // 2
+```
+
+Això també explica que una funció pugui modificar les propietats d'un objecte rebut com a argument, però no modificar directament una variable primitiva externa.
 
 📄 Exemple: [08-referencia.js](08-referencia.js)
 
 ---
 
-## 9. Llistat de propietats
-Amb `Object.keys`, `Object.values` i `Object.entries` podem obtenir informació de les propietats.
+## 9. Propietats i mètodes
+
+Podem comprovar si una propietat existeix i recórrer les propietats d'un objecte:
 
 ```js
-let obj = { nom: "Anna", edat: 25 };
-console.log(Object.keys(obj));   // ["nom","edat"]
-console.log(Object.values(obj)); // ["Anna",25]
+const punt = {
+  x: 10,
+  y: 15,
+  dibuixar() {
+    console.log("Dibuixant...");
+  }
+};
+
+console.log("x" in punt); // true
+console.log(Object.keys(punt));
+console.log(Object.values(punt));
+console.log(Object.entries(punt));
 ```
 
-📄 Exemple: [09-list-props.js](09-list-props.js)
+- `in` comprova si una propietat existeix a l'objecte o a la seva cadena de prototips.
+- `Object.hasOwn()` comprova si és una propietat pròpia de l'objecte.
+- `Object.keys()` retorna les claus pròpies enumerables.
+- `Object.values()` retorna els valors propis enumerables.
+- `Object.entries()` retorna parelles `[clau, valor]`.
+
+📄 Exemple: [09-llistat-propietats.js](09-llistat-propietats.js)
 
 ---
 
-## 10. Clonació
-Maneres de copiar objectes:
+## 10. Clonació d'objectes
+
+L'operador spread i `Object.assign()` creen una **còpia superficial**. Les propietats primitives es copien, però els objectes niuats continuen compartint referència.
 
 ```js
-let a = {x:1};
-let copia1 = Object.assign({}, a);
-let copia2 = {...a};
-let copia3 = JSON.parse(JSON.stringify(a)); // còpia profunda
+const original = {
+  nom: "Anna",
+  adreca: { ciutat: "Barcelona" }
+};
+
+const copia = { ...original };
+copia.nom = "Joan";
+copia.adreca.ciutat = "Girona";
+
+console.log(original.nom); // "Anna"
+console.log(original.adreca.ciutat); // "Girona"
 ```
+
+Per a estructures de dades senzilles, `structuredClone()` permet crear una còpia profunda:
+
+```js
+const copiaProfunda = structuredClone(original);
+```
+
+`JSON.parse(JSON.stringify(objecte))` també pot servir en casos molt limitats, però perd valors com funcions, `undefined` o objectes `Date` i no és una còpia general.
 
 📄 Exemple: [10-clons.js](10-clons.js)
 
 ---
 
-## 11. Propietats privades i públiques
-Amb funcions constructores podem diferenciar entre propietats públiques i privades (simulades amb closures):  
-**Públiques**: es defineixen amb `this` i es poden accedir des de fora de l’objecte.  
-**Privades**: es defineixen com a variables locals dins de la funció constructora i només es poden accedir a través de mètodes públics.
+## 11. Propietats públiques i privades
+
+Una propietat pública es pot consultar directament des de fora. Una variable local dins d'una funció constructora queda encapsulada i només s'hi pot accedir mitjançant els mètodes públics que la tanquin dins d'una **closure**.
 
 ```js
 function CompteBancari(saldoInicial) {
-  // Propietat privada (variable local)
   let saldo = saldoInicial;
 
-  // Propietat pública
   this.titular = "Anònim";
 
-  // Mètode públic per llegir el saldo
-  this.getSaldo = function() {
+  this.getSaldo = function () {
     return saldo;
   };
 
-  // Mètode públic per ingressar diners
-  this.ingressar = function(quantitat) {
+  this.ingressar = function (quantitat) {
     saldo += quantitat;
   };
 }
 ```
-Aquest patró és el que es feia servir abans d’**ES6** per simular propietats privades.
-Més endavant veurem com ES6 introdueix les **classes** i, posteriorment, la sintaxi amb `#` per definir propietats realment privades.
+
+Aquest patró és una forma tradicional de simular propietats privades. JavaScript modern també permet utilitzar camps privats amb `#` dins de les classes.
 
 📄 Exemple: [11-privat-public.js](11-privat-public.js)
 
 ---
 
-## 12. Objecte Math
-Proporciona constants i mètodes matemàtics.
+## 12. Objecte `Math`
+
+`Math` ofereix constants i mètodes matemàtics. No cal crear-lo amb `new`.
 
 ```js
-console.log(Math.PI);       // 3.14159...
-console.log(Math.random()); // número aleatori entre 0 i 1
-console.log(Math.floor(4.8)); // 4
+console.log(Math.PI);
+console.log(Math.round(15.5)); // 16
+console.log(Math.floor(15.9)); // 15
+console.log(Math.ceil(15.1));  // 16
+console.log(Math.sqrt(9));     // 3
 ```
-[Math - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)  
-📄 Exemple: [12-Math.js](12-Math.js)
+
+`Math.random()` retorna un nombre pseudoaleatori més gran o igual que `0` i menor que `1`.
+
+📄 Exemple: [12-math.js](12-math.js)
+
+📘 [MDN - Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
 
 ---
 
-## 13. Objecte Date
-Serveix per treballar amb dates i hores.
+## 13. Objecte `Date`
+
+`Date` permet representar dates i hores. Els mesos dels constructors numèrics comencen per `0`: gener és `0` i desembre és `11`.
 
 ```js
-let ara = new Date();
-console.log(ara.getFullYear());
+const ara = new Date();
+const data = new Date(1986, 11, 25, 14, 15);
+
 console.log(ara.toLocaleDateString());
+console.log(data.getFullYear());
 ```
-[Date - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)  
-📄 Exemple: [13-Date.js](13-Date.js)
+
+📄 Exemple: [13-date.js](13-date.js)
+
+📘 [MDN - Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
 ---
 
-## 14. Objecte String
-Ofereix propietats i mètodes útils.
+## 14. Objecte `String`
+
+Les cadenes tenen propietats i mètodes per consultar-les i crear-ne de noves.
 
 ```js
-let txt = "Hola";
-console.log(txt.length);
-console.log(txt.toUpperCase());
-console.log(txt.includes("Ho"));
+const text = "Hola";
+
+console.log(text.length);
+console.log(text.toUpperCase());
+console.log(text.includes("Ho"));
+console.log(text.replace("Hola", "Classe"));
 ```
+
+Els mètodes com `replace()`, `toUpperCase()` i `trim()` no modifiquen la cadena original; retornen una cadena nova.
+
+`substr()` és una API obsoleta. És preferible utilitzar `slice()` o `substring()`.
 
 📄 Exemple: [14-string.js](14-string.js)
 
+📘 [MDN - String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+
 ---
 
-## 15. Caràcters d’escapament
-Per escriure caràcters especials:
+## 15. Caràcters d'escapament
 
-- `\\` → barra invertida  
-- `\'` → cometa simple  
-- `\"` → cometa doble  
-- `\n` → nova línia  
-- `\t` → tabulació  
+Els caràcters d'escapament permeten representar caràcters especials dins d'una cadena:
+
+| Seqüència | Significat |
+| --- | --- |
+| `\\` | Barra invertida |
+| `\'` | Cometa simple |
+| `\"` | Cometa doble |
+| `\n` | Nova línia |
+| `\t` | Tabulació |
 
 ```js
-let frase = "Línia1\nLínia2";
+const frase = "Línia 1\nLínia 2";
 console.log(frase);
 ```
 
-📄 Exemple: [15-escapda.js](15-escapda.js)
+📄 Exemple: [15-escapament.js](15-escapament.js)
 
 ---
 
-## 16. Template Strings
-Permeten interpolació amb `${}` i multilínia.
+## 16. Template strings
+
+Les template strings utilitzen accents greus i permeten interpolar expressions amb `${}`. També poden ocupar diverses línies.
 
 ```js
-let nom = "Anna";
-console.log(`Hola ${nom}, com estàs?`);
+const nom = "Anna";
+const missatge = `Hola ${nom}, com estàs?`;
+
+console.log(missatge);
 ```
 
-📄 Exemple: [16-templates.js](16-templates.js)
+📄 Exemple: [16-template-strings.js](16-template-strings.js)
+
+📘 [MDN - Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 
 ---
 
+## 17. Exercicis
+
+Els exercicis practiquen objectes literals, funcions constructores, propietats públiques i privades, clonació i mètodes d'objectes.
+
+📄 [Enunciat dels exercicis](enunciat-exercicis-3a.md)
+
+---
+
+## 18. Recursos
+
+- [Objectes - MDN](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects)
+- [Treballar amb objectes - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)
+- [Object prototypes - MDN](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
+- [Object.assign() - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+- [Object.hasOwn() - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn)
+- [structuredClone() - MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)

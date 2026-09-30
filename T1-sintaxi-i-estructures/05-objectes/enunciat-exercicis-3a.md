@@ -1,4 +1,7 @@
-# Exercicis - Objectes
+# Exercicis - objectes
+
+Completa els exercicis utilitzant objectes, funcions constructores, mètodes i propietats públiques o privades.
+Mostra els resultats amb `console.log` i comprova que les dades finals coincideixin amb les sortides indicades.
 
 ## Exercici 1: Usuaris
 
@@ -10,6 +13,7 @@ Definirem la funció constructora per crear usuaris i en definirem 3 usant la pa
 
 **Usuari 1**  
 - Nom: Chanchito  
+- Cognom: Pérez
 - Àlies: Feliç  
 - Data de naixement: 10 d’abril de 1992  
 - Adreça: Av. Sempre Viva, 742  
@@ -19,6 +23,7 @@ Definirem la funció constructora per crear usuaris i en definirem 3 usant la pa
 
 **Usuari 2**  
 - Nom: Chanchito  
+- Cognom: García
 - Àlies: Trist  
 - Data de naixement: 25 de juny de 1985  
 - Adreça: Carrer Lluna, 123  
@@ -29,6 +34,7 @@ Definirem la funció constructora per crear usuaris i en definirem 3 usant la pa
 **Usuari 3**  
 - Nom: Felipe  
 - Cognom: Schurmann  
+- Àlies: Felipe
 - Data de naixement: 3 de setembre de 2000  
 - Adreça: Boulevard del Sol, 456  
 - Edat: 23 anys  
@@ -51,16 +57,18 @@ Copiarem la funció constructora de l’exercici anterior, però només crearem 
 - Nom: Chanchito  
 - Àlies: Feliç  
 - Data de naixement: 10 d’abril de 1992  
-- Adreça: Av. Sempre Viva, 742  
+- Cognom: Pérez
+- Adreça: Av. Sempre Viva, 742
 - Edat: 31 anys  
 - País de naixement: Mèxic  
 - Subscripció activa: true  
+- Alçada: 1.75 m
 
 Farem 3 validacions per verificar que aquest objecte tingui les propietats i farem l’acció corresponent.
 
 ### Sortides
 Imprimirem l’usuari després de les modificacions.  
-El resultat ha de ser un objecte amb la propietat `{ subscripció }` = `false` i sense la propietat `{ adreça }`.
+El resultat ha de ser un objecte amb la propietat `subscripció` igual a `false` i sense les propietats `adreça` ni `alçada`.
 
 ---
 
@@ -104,11 +112,11 @@ Accions a realitzar:
 1. Mostrar la informació de l’esdeveniment.  
 2. Comprar 3 entrades.  
 3. Mostrar la informació.  
-4. Intentar canviar directament el valor de la propietat d’entrades a 100.  
+4. Intentar canviar directament el valor de la propietat d’entrades a 100. Comprovar que no es pot modificar des de fora.
 5. Cancel·lar una entrada.  
 6. Mostrar la informació.  
 
-Al final, l’esdeveniment ha de tenir 48 entrades.
+Al final, l’esdeveniment ha de tenir 48 entrades. La propietat `entradesDisponibles` no s’ha de poder consultar ni modificar directament des de fora.
 
 ---
 
@@ -162,6 +170,8 @@ Crearem un joc de cartes, on cada carta serà un objecte amb propietats i mètod
 - **Rebre atac**: resta punts de vida segons el dany rebut. Si arriba a 0 o menys, la carta queda derrotada.  
 - **Afegir energia**: incrementa l’energia disponible.  
 
+Per simplificar l'exercici, si el tipus de l'atac coincideix amb la debilitat de la carta objectiu, el dany es duplica.
+
 ### Entrades
 **Carta 1**  
 - Nom: Drac de Foc  
@@ -181,7 +191,7 @@ Crearem un joc de cartes, on cada carta serà un objecte amb propietats i mètod
 - Debilitat: Elèctric  
 
 ### Sortides
-Execució de la seqüència d’atacs i energies, mostrant els missatges coherents:  
+Executa una seqüència que permeti comprovar els mètodes, per exemple: afegir energia a les dues cartes, atacar amb la primera carta, rebre el dany amb la segona i repetir l'acció fins que una carta quedi derrotada. Mostra missatges coherents sobre:
 - energia guanyada,  
 - atac realitzat,  
 - dany rebut,  
