@@ -11,9 +11,11 @@ let obj2 = new Object();
  * new Number(); 12
  * new Boolean(); true false
  */
-// Encara que no definim el tipus com objecte, JS automaticament els embolcalla com a objecte per a poder fer servir els seus mètodes
+// Encara que no definim el tipus com objecte, 
+// JS automaticament els embolcalla com a objecte per a poder fer servir els seus mètodes
 // "".length
 // let a = 4; a.toString() ---> '4'
+
 let a = 4;
 console.log(a.toString().length);
 
@@ -24,6 +26,7 @@ function Usuari() {
     this.name = "Chanchito feliz";
 }
 let user = new Usuari();
+
 console.log(user.constructor);
 // string literal
 console.log("literal");

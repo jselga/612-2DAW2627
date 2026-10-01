@@ -3,27 +3,29 @@
 Aquest document és una **referència** sobre els objectes, les funcions i alguns objectes natius de JavaScript.
 Cada secció inclou una explicació breu, un exemple i un enllaç al fitxer `.js` corresponent.
 
+[📚 **Referència general**](#-referència-general)
+
 ## Índex
 
-- [Resum sobre objectes en JavaScript](#resum-sobre-objectes-en-javascript)
-  - [1. Objectes literals](#1-objectes-literals)
-  - [2. Objectes dinàmics](#2-objectes-dinàmics)
-  - [3. Factory functions](#3-factory-functions)
-  - [4. Funcions constructores](#4-funcions-constructores)
-  - [5. Constructors natius i boxing](#5-constructors-natius-i-boxing)
-  - [6. Funcions com a objectes de primera classe](#6-funcions-com-a-objectes-de-primera-classe)
-  - [7. El constructor Function](#7-el-constructor-function)
-  - [8. Referències i còpia de valors](#8-referències-i-còpia-de-valors)
-  - [9. Propietats i mètodes](#9-propietats-i-mètodes)
-  - [10. Clonació d’objectes](#10-clonació-dobjectes)
-  - [11. Propietats públiques i privades](#11-propietats-públiques-i-privades)
-  - [12. Objecte Math](#12-objecte-math)
-  - [13. Objecte Date](#13-objecte-date)
-  - [14. Objecte String](#14-objecte-string)
-  - [15. Caràcters d’escapament](#15-caràcters-descapament)
-  - [16. Template strings](#16-template-strings)
-  - [17. Exercicis](#17-exercicis)
-  - [18. Recursos](#18-recursos)
+- [Índex](#índex)
+- [1. Objectes literals](#1-objectes-literals)
+- [2. Objectes dinàmics](#2-objectes-dinàmics)
+- [3. Factory functions](#3-factory-functions)
+- [4. Funcions constructores](#4-funcions-constructores)
+- [5. Constructors natius i boxing](#5-constructors-natius-i-boxing)
+- [6. Funcions com a objectes de primera classe](#6-funcions-com-a-objectes-de-primera-classe)
+- [7. El constructor `Function`](#7-el-constructor-function)
+- [8. Referències i còpia de valors](#8-referències-i-còpia-de-valors)
+- [9. Propietats i mètodes](#9-propietats-i-mètodes)
+- [10. Clonació d'objectes](#10-clonació-dobjectes)
+- [11. Propietats públiques i privades](#11-propietats-públiques-i-privades)
+- [12. Objecte `Math`](#12-objecte-math)
+- [13. Objecte `Date`](#13-objecte-date)
+- [14. Objecte `String`](#14-objecte-string)
+- [15. Caràcters d'escapament](#15-caràcters-descapament)
+- [16. Template strings](#16-template-strings)
+- [17. Exercicis](#17-exercicis)
+- [📚 Referència general](#-referència-general)
 
 ---
 
@@ -43,7 +45,7 @@ const usuari = {
 usuari.saluda();
 ```
 
-📄 Exemple: [01-intro.js](01-intro.js)
+🧩 Exemple: [01-intro.js](01-intro.js)
 
 ---
 
@@ -61,7 +63,11 @@ delete usuari.actiu;
 
 `Object.freeze()` impedeix modificar un objecte. `Object.seal()` impedeix afegir-hi o eliminar-ne propietats, però permet modificar els valors existents.
 
-📄 Exemple: [02-dinamic.js](02-dinamic.js)
+🧩 Exemple: [02-dinamic.js](02-dinamic.js)
+
+📚 **Referència:**
+- [MDN – Object.seal()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
+- [MDN – Object.freeze()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
 
 ---
 
@@ -81,7 +87,7 @@ function crearUsuari(nom, email) {
 const usuari = crearUsuari("Anna", "anna@example.com");
 ```
 
-📄 Exemple: [03-factory.js](03-factory.js)
+🧩 Exemple: [03-factory.js](03-factory.js)
 
 ---
 
@@ -99,9 +105,10 @@ const persona = new Persona("Joan", 30);
 console.log(persona);
 ```
 
-Quan s'utilitza `new`, JavaScript crea un objecte nou, el relaciona amb el prototip de la funció, assigna aquest objecte a `this` i el retorna, tret que el constructor retorni explícitament un altre objecte.
+Quan s'utilitza `new`, JavaScript crea un objecte nou, el relaciona amb el prototip<sup>1</sup> de la funció, assigna aquest objecte a `this` i el retorna, tret que el constructor retorni explícitament un altre objecte.
+> <sup>1</sup> Es tractarà el tema prototips en apartats posteriors (08-prototips)
 
-📄 Exemple: [04-constructor.js](04-constructor.js)
+🧩 Exemple: [04-constructor.js](04-constructor.js)
 
 ---
 
@@ -127,7 +134,7 @@ console.log("Hola".length);     // 4
 
 Els objectes `new String()`, `new Number()` i `new Boolean()` no són equivalents als primitius i poden provocar comparacions inesperades. En general, cal preferir els literals.
 
-📄 Exemple: [05-dreceres.js](05-dreceres.js)
+🧩 Exemple: [05-dreceres.js](05-dreceres.js)
 
 ---
 
@@ -150,7 +157,7 @@ function crearSalutacio() {
 }
 ```
 
-📄 Exemple: [06-funcions.js](06-funcions.js)
+🧩 Exemple: [06-funcions.js](06-funcions.js)
 
 ---
 
@@ -165,7 +172,7 @@ console.log(suma(2, 3)); // 5
 
 No es recomana utilitzar-lo habitualment perquè és semblant a `eval`: pot executar codi no segur, dificulta la lectura i només té accés a l'àmbit global. És preferible declarar les funcions amb la sintaxi normal.
 
-📄 Exemple: [07-function.js](07-function.js)
+🧩 Exemple: [07-function.js](07-function.js)
 
 ---
 
@@ -194,7 +201,7 @@ console.log(original.valor); // 2
 
 Això també explica que una funció pugui modificar les propietats d'un objecte rebut com a argument, però no modificar directament una variable primitiva externa.
 
-📄 Exemple: [08-referencia.js](08-referencia.js)
+🧩 Exemple: [08-referencia.js](08-referencia.js)
 
 ---
 
@@ -223,7 +230,14 @@ console.log(Object.entries(punt));
 - `Object.values()` retorna els valors propis enumerables.
 - `Object.entries()` retorna parelles `[clau, valor]`.
 
-📄 Exemple: [09-llistat-propietats.js](09-llistat-propietats.js)
+🧩 Exemple: [09-llistat-propietats.js](09-llistat-propietats.js)
+
+📚 **Referència:**
+- [MDN – operador `in`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/in)
+- [MDN – Object.hasOwn()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn)
+- [MDN – Object.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys)
+- [MDN – Object.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
+- [MDN – Object.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 
 ---
 
@@ -253,7 +267,12 @@ const copiaProfunda = structuredClone(original);
 
 `JSON.parse(JSON.stringify(objecte))` també pot servir en casos molt limitats, però perd valors com funcions, `undefined` o objectes `Date` i no és una còpia general.
 
-📄 Exemple: [10-clons.js](10-clons.js)
+🧩 Exemple: [10-clons.js](10-clons.js)
+
+📚 **Referència:**
+- [MDN – Object.assign()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
+- [MDN – Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+- [MDN – structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)
 
 ---
 
@@ -279,7 +298,7 @@ function CompteBancari(saldoInicial) {
 
 Aquest patró és una forma tradicional de simular propietats privades. JavaScript modern també permet utilitzar camps privats amb `#` dins de les classes.
 
-📄 Exemple: [11-privat-public.js](11-privat-public.js)
+🧩 Exemple: [11-privat-public.js](11-privat-public.js)
 
 ---
 
@@ -297,7 +316,7 @@ console.log(Math.sqrt(9));     // 3
 
 `Math.random()` retorna un nombre pseudoaleatori més gran o igual que `0` i menor que `1`.
 
-📄 Exemple: [12-math.js](12-math.js)
+🧩 Exemple: [12-math.js](12-math.js)
 
 📘 [MDN - Math](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math)
 
@@ -315,7 +334,7 @@ console.log(ara.toLocaleDateString());
 console.log(data.getFullYear());
 ```
 
-📄 Exemple: [13-date.js](13-date.js)
+🧩 Exemple: [13-date.js](13-date.js)
 
 📘 [MDN - Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 
@@ -338,7 +357,7 @@ Els mètodes com `replace()`, `toUpperCase()` i `trim()` no modifiquen la cadena
 
 `substr()` és una API obsoleta. És preferible utilitzar `slice()` o `substring()`.
 
-📄 Exemple: [14-string.js](14-string.js)
+🧩 Exemple: [14-string.js](14-string.js)
 
 📘 [MDN - String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
@@ -361,7 +380,7 @@ const frase = "Línia 1\nLínia 2";
 console.log(frase);
 ```
 
-📄 Exemple: [15-escapament.js](15-escapament.js)
+🧩 Exemple: [15-escapament.js](15-escapament.js)
 
 ---
 
@@ -376,7 +395,7 @@ const missatge = `Hola ${nom}, com estàs?`;
 console.log(missatge);
 ```
 
-📄 Exemple: [16-template-strings.js](16-template-strings.js)
+🧩 Exemple: [16-template-strings.js](16-template-strings.js)
 
 📘 [MDN - Template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 
@@ -386,15 +405,13 @@ console.log(missatge);
 
 Els exercicis practiquen objectes literals, funcions constructores, propietats públiques i privades, clonació i mètodes d'objectes.
 
+
 📄 [Enunciat dels exercicis](enunciat-exercicis-3a.md)
 
 ---
 
-## 18. Recursos
+## 📚 Referència general
 
-- [Objectes - MDN](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects)
-- [Treballar amb objectes - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)
-- [Object prototypes - MDN](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
-- [Object.assign() - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
-- [Object.hasOwn() - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn)
-- [structuredClone() - MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone)
+- [MDN – Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object)
+- [MDN – Object prototypes](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes)
+- [MDN – Working with objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects)

@@ -1,17 +1,18 @@
 let user = {
     email: 'nico@holamundo.io',
     name: 'Nicolas',
-    direccion: {
-        calle: 'Queen st',
-        numero: 15,
+    address: {
+        street: 'Queen st',
+        number: 15,
     },
-    activo: true,
-    recuperarClau: function () {
+    active: true,
+    // Aquí estem fent servir una funció anònima, es treballarà més endavant
+    recoverPsw: function () {
         console.log('Recuperant clau...');
 
     },
 
 
 };
-user.recuperarClau();
+user.recoverPsw();
 
