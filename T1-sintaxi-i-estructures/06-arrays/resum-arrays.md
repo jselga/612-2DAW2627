@@ -278,7 +278,8 @@ console.log(majuscules); // ["ANNA", "JOAN", "MARIA"]
 `reduce()` recorre l'array i acumula els elements en un únic resultat. El valor inicial de l'acumulador s'indica com a segon argument.
 ```
 reduce([(acumuludor,elementiterant)=>({})],[valor inicial acumulador])
-``
+``` 
+
 ```js
 const nums = [1, 2, 3, 4];
 const suma = nums.reduce((acumulador, numero) => acumulador + numero, 0);
