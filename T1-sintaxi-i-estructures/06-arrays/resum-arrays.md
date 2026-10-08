@@ -7,6 +7,7 @@ Cada secció inclou una explicació breu, un exemple, referències a MDN i, quan
 
 ## Índex
 
+- [Índex](#índex)
 - [1. Què és un array?](#1-què-és-un-array)
 - [2. Afegir i eliminar elements](#2-afegir-i-eliminar-elements)
 - [3. Cercar elements](#3-cercar-elements)
@@ -18,10 +19,10 @@ Cada secció inclou una explicació breu, un exemple, referències a MDN i, quan
 - [9. Ordenar i invertir elements](#9-ordenar-i-invertir-elements)
 - [10. Comprovar condicions](#10-comprovar-condicions)
 - [11. Filtrar elements](#11-filtrar-elements)
-- [12. Transformar elements amb map](#12-transformar-elements-amb-map)
-- [13. Acumular valors amb reduce](#13-acumular-valors-amb-reduce)
+- [12. Transformar elements amb `map()`](#12-transformar-elements-amb-map)
+- [13. Acumular valors amb `reduce()`](#13-acumular-valors-amb-reduce)
 - [14. Exercicis](#14-exercicis)
-- [Referència general](#-referència-general)
+- [📚 Referència general](#-referència-general)
 
 ---
 
@@ -275,7 +276,9 @@ console.log(majuscules); // ["ANNA", "JOAN", "MARIA"]
 ## 13. Acumular valors amb `reduce()`
 
 `reduce()` recorre l'array i acumula els elements en un únic resultat. El valor inicial de l'acumulador s'indica com a segon argument.
-
+```
+reduce([(acumuludor,elementiterant)=>({})],[valor inicial acumulador])
+``
 ```js
 const nums = [1, 2, 3, 4];
 const suma = nums.reduce((acumulador, numero) => acumulador + numero, 0);

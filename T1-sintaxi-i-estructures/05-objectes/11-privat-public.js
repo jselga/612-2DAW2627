@@ -12,16 +12,16 @@
 // const user = new Usuari();
 // user.log = function(){
 //     console.log('lala');
-    
+
 // }
 // user.save();
 // Amb mètodes privats
-function Usuari(){
-    this.name='Nico';
-    let log = function(){
+function Usuari() {
+    this.name = 'Nico';
+    let log = function () {
         console.log('logging...');
     }
-    this.save = function(){
+    this.save = function () {
         log();
         console.log('saving...');
     }
@@ -30,6 +30,10 @@ const user = new Usuari();
 // mètode privat,una instancia no pot accedir-hi
 // user.log = function(){
 //     console.log('lala');
-    
+
 // }
+console.log(user.name);
+user.name = "Felipe"
+console.log(user.name);
+
 user.save();

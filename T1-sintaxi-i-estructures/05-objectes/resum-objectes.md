@@ -278,25 +278,42 @@ const copiaProfunda = structuredClone(original);
 
 ## 11. Propietats públiques i privades
 
-Una propietat pública es pot consultar directament des de fora. Una variable local dins d'una funció constructora queda encapsulada i només s'hi pot accedir mitjançant els mètodes públics que la tanquin dins d'una **closure**.
+Una propietat pública es pot consultar directament des de fora. En canvi, una variable local o una funció declarada dins d'una funció constructora queda privada: no s'hi pot accedir directament des de fora de la funció.
+
+> **Nota — Closure (clausura):** és una funció que conserva l'accés a les variables de l'àmbit on s'ha creat, fins i tot quan aquest àmbit ja ha acabat d'executar-se. En aquest exemple, els mètodes públics definits dins del constructor conserven l'accés a `saldo` i `comprovarQuantitat()`.
+
+En l'exemple següent, `saldo` és una propietat privada i `comprovarQuantitat()` és un mètode privat. Els mètodes públics definits dins del constructor poden continuar accedint-hi. `titular`, `ingressar()` i `getSaldo()` són públics:
 
 ```js
 function CompteBancari(saldoInicial) {
   let saldo = saldoInicial;
 
+  function comprovarQuantitat(quantitat) {
+    return quantitat > 0;
+  }
+
   this.titular = "Anònim";
+
+  this.ingressar = function (quantitat) {
+    if (comprovarQuantitat(quantitat)) {
+      saldo += quantitat;
+    }
+  };
 
   this.getSaldo = function () {
     return saldo;
   };
-
-  this.ingressar = function (quantitat) {
-    saldo += quantitat;
-  };
 }
+
+const compte = new CompteBancari(100);
+compte.ingressar(50);
+
+console.log(compte.titular); // "Anònim"
+console.log(compte.getSaldo()); // 150
+// compte.saldo i compte.comprovarQuantitat no són accessibles des de fora
 ```
 
-Aquest patró és una forma tradicional de simular propietats privades. JavaScript modern també permet utilitzar camps privats amb `#` dins de les classes.
+Aquest patró permet encapsular dades i funcions mitjançant una **closure**. JavaScript també ofereix camps privats amb `#` dins de les classes; els treballarem més endavant, quan estudiem les classes modernes amb ES6+.
 
 🧩 Exemple: [11-privat-public.js](11-privat-public.js)
 
