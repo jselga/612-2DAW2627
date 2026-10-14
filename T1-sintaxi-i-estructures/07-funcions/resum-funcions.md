@@ -1,37 +1,68 @@
-# Funcions en JavaScript — Resum
+# Resum sobre funcions en JavaScript
 
+Aquest document és una **referència** sobre la definició i l'ús de funcions en JavaScript.
+Cada secció inclou una explicació breu, un exemple, un enllaç al fitxer `.js` corresponent i referències a MDN quan són útils.
 
-[📚 **Recursos**](#recursos)
+[📚 **Referència general**](#-referència-general)
 
-## Conceptes i accions amb Funcions
+## Índex
 
-### 1. Declaració vs Expressió de funció
-Una **declaració** de funció (`function nom(){}`) es carrega en temps de *hoisting*; una **expressió** (`const x = function(){}`) només existeix després d’avaluar la línia.
-```js
-// Declaració de funció nombrada
-function suma(a, b) { return a + b; }
-
-// Expressió de funció anònima
-const resta = function (a, b) { return a - b; };
-
-console.log(suma(2, 3)); // 5
-console.log(resta(5, 2)); // 3
-```
-🧩 Exemple: [01-declaracio-expressio.js](./01-declaracio-expressio.js)  
-[📘 MDN — Declarations vs Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#function_declarations_vs_function_expressions)
+- [1. Declaracions i expressions de funció](#1-declaracions-i-expressions-de-funció)
+- [2. Àmbit i declaracions de variables](#2-àmbit-i-declaracions-de-variables)
+- [3. Closures](#3-closures)
+- [4. L'objecte arguments](#4-lobjecte-arguments)
+- [5. Arrow functions](#5-arrow-functions)
+- [6. Paràmetres rest](#6-paràmetres-rest)
+- [7. Paràmetres per defecte](#7-paràmetres-per-defecte)
+- [8. Desestructuració de paràmetres](#8-desestructuració-de-paràmetres)
+- [9. Getters i setters](#9-getters-i-setters)
+- [10. Gestió d'errors](#10-gestió-derrors)
+- [11. El valor de `this`](#11-el-valor-de-this)
+- [12. `this` i arrow functions](#12-this-i-arrow-functions)
+- [13. `call()`, `apply()` i `bind()`](#13-call-apply-i-bind)
+- [14. Exercicis](#14-exercicis)
+- [Referència general](#-referència-general)
 
 ---
 
-### 2. Variables let/var/const 
-Totes les variables es veuen afectes pel *hoisting* però 
-`var` té àmbit de **funció** i es veu afectat plenament pel *hoisting* igual que les funcions; `let` i `const`, en canvi, tenen àmbit de **bloc** i són més previsibles.  Per això es desaconsella utilitzar `var`. Entre altres coses pot donar problemes en fer servir dependències de tercers. Les funcions es "salven" perque hi ha maneres d'encapsular-les. 
-| Declaració | Hoisting                 | Inicialització | Accés abans de declarar    |
-| ---------- | ------------------------ | -------------- | -------------------------- |
-| `var`      | Sí                       | `undefined`    | ✅ Retorna `undefined`      |
-| `let`      | Sí (només la declaració) | No             | ❌ Error (`ReferenceError`) |
-| `const`    | Sí (només la declaració) | No             | ❌ Error (`ReferenceError`) |
-| `function`      | Sí                       | Sí    | ✅ Retorna `[Function: nom-de-la-funció]`      |
+## 1. Declaracions i expressions de funció
 
+Una **declaració de funció** defineix una funció amb nom. Les declaracions es poden cridar abans de la seva posició al codi perquè es processen abans d'executar el cos del programa.
+
+```js
+function suma(a, b) {
+  return a + b;
+}
+
+console.log(suma(2, 3)); // 5
+```
+
+Una **expressió de funció** crea una funció com a part d'una expressió, sovint assignant-la a una variable. No s'ha de cridar abans que s'hagi avaluat l'assignació.
+
+```js
+const resta = function (a, b) {
+  return a - b;
+};
+
+console.log(resta(5, 2)); // 3
+```
+
+🧩 Exemple: [01-declaracio-expressio.js](01-declaracio-expressio.js)
+
+📚 **Referència:**
+- [MDN – Function declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions#function_hoisting)
+- [MDN – Function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)
+
+---
+
+## 2. Àmbit i declaracions de variables
+
+L'**àmbit** (*scope*) determina des de quines parts del codi es pot accedir a una variable.
+
+- `var` té àmbit de funció i permet tornar a declarar la mateixa variable dins del mateix àmbit.
+- `let` i `const` tenen àmbit de bloc. `const` no permet assignar un valor nou a la mateixa variable.
+- Les declaracions `let` i `const` existeixen des de l'inici del seu àmbit, però no es poden utilitzar abans de la línia de declaració: es troben a la **zona temporal morta** (*temporal dead zone*).
+- Les declaracions de funció es poden cridar abans de la seva definició; les expressions de funció assignades a `let` o `const` no.
 
 ```js
 function prova() {
@@ -40,277 +71,305 @@ function prova() {
     let y = 2;
     const z = 3;
   }
+
   console.log(x); // 1
-  // console.log(y); // ReferenceError
+  // y i z només són accessibles dins del bloc if
 }
-prova();
 ```
 
-🧩 Exemple: [02-let-var-const-fn.js](./02-let-var-const-fn.js)    
-[📘 MDN — Var Hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#hoisting)  
-[🎞️ @Carlos Azaustre | Youtube Shorts — Hoisting](https://www.youtube.com/shorts/h-XhhALKm2U)     
-[🎞️ @makigas | Youtube Shorts — Let vs Var](https://youtube.com/shorts/cFD9bB3UEtY?si=HeBUC9GPeSzY-7xz)  
-[📼 @TodoCode | Youtube — Var, Let y Const](https://www.youtube.com/watch?v=a8SJJPvkGIE)  
+En general, per al codi nou és preferible utilitzar `const` quan no cal reassignar i `let` quan sí que cal; reserva `var` per entendre codi existent.
+
+🧩 Exemple: [02-let-var-const-fn.js](02-let-var-const-fn.js)
+
+📚 **Referència:**
+- [MDN – `var` i hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#hoisting)
+- [MDN – `let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
+- [MDN – `const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
+- [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
 
 ---
 
-### 3. Àmbit (scope) i *closure*
-L’àmbit determina on són visibles les variables. És important saber on "viu" cada variable. Per això són molt útils les eines de *debug*.  
-Un **closure** és una funció que “recorda” l’entorn on va ser creada, encara que s’executi més tard o fora d’aquell lloc on va ser definida. És a dir, un **closure** permet que una funció accedeixi a variables de l’exterior de la seva pròpia definició, fins i tot després que aquesta funció “mare” hagi acabat d’executar-se.
+## 3. Closures
+
+Una **closure** és una funció juntament amb l'entorn lèxic on s'ha creat. Per això, una funció interna pot continuar accedint a variables de la funció externa encara que aquesta ja hagi acabat.
+
 ```js
 function creadorDeSumadors(a) {
-  return function (b) { // funció interna (Closure)
+  return function (b) {
     return a + b;
   };
 }
+
 const suma5 = creadorDeSumadors(5);
 console.log(suma5(2)); // 7
 ```
-Fent ús d'eines de *debug* o observant el que surt a la consola es pot veure l'àmbit de les variables. Prova els exemples mostrats.   
-🧩 Exemple: [03-ambit.js](./03-ambit.js)  
-[📘 MDN — Clousures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)  
-[📼 @Carlos Azaustre | Youtube — Scope en JS](https://www.youtube.com/watch?v=7zxSu_xlhTE)
+
+Les closures permeten conservar estat privat entre crides d'una funció.
+
+🧩 Exemple: [03-ambit.js](03-ambit.js)
+
+📘 [MDN – Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
 
 ---
 
-### 4. Arguments
-La paraula reservada `arguments` és semblant a un array amb tots els arguments passats a una funció “clàssica”. Concretament és un objecte on les propietats d'aquest són els arguments. Aquest objecte s'anomena [Iterator](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator) i el podem recorrer amb un `for` o bé el podem trasformar en un **array** amb `Array.from(arguments)`.
+## 4. L'objecte `arguments`
 
- En el cas de les  **arrow functions** no funciona i  farem servir [**rest** `...args`](#6-paràmetres-rest).
+En una funció tradicional, `arguments` és un objecte semblant a un array que conté els arguments rebuts. Es pot recórrer o convertir a un array amb `Array.from()`.
+
 ```js
-function total() {
-  let suma = 0;
-  for (const n of arguments) suma += n;
-  return suma;
+function suma() {
+  return Array.from(arguments)
+    .reduce((acumulador, valor) => acumulador + valor, 0);
 }
-console.log(total(1,2,3)); // 6
+
+console.log(suma(1, 2, 3)); // 6
 ```
-🧩 Exemple: [04-arguments.js](./04-arguments.js)  
-[📘 MDN — Arguments](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments)   
-[📘 MDN — Iterator](https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator)  
-[📘 MDN — Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+
+`arguments` **no és un array** i les arrow functions no tenen el seu propi objecte `arguments`. Per recollir arguments variables, és preferible utilitzar paràmetres rest.
+
+🧩 Exemple: [04-arguments.js](04-arguments.js)
+
+📚 **Referència:**
+- [MDN – The `arguments` object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments)
+- [MDN – Array.from()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
 
 ---
 
-### 5. Fat arrow functions
-Sintaxi curta, *return* implícit en una sola expressió. És una versió reduïda de les funcions habituals. **No** tenen `arguments`, ni context de `this` ni tampoc compten amb la funció `super`.  Són molt útils en funcions dins de funcions i en contextos on es busca simplicitat de codi.
+## 5. Arrow functions
+
+Les **arrow functions** (`=>`) ofereixen una sintaxi compacta. Si el cos conté una sola expressió, el valor d'aquesta es retorna implícitament.
+
 ```js
 const doble = n => n * 2;
 const suma = (a, b) => a + b;
+
 console.log(doble(4)); // 8
+console.log(suma(2, 3)); // 5
 ```
-🧩 Exemple: [05-fat-arrow.js](./05-fat-arrow.js)  
-[📘 MDN — Arrow Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+
+Les arrow functions no tenen un `this`, `arguments` ni `super` propis: els obtenen del context lèxic on es creen. No substitueixen les funcions tradicionals en tots els casos; per exemple, no s'utilitzen com a funcions constructores amb `new`.
+
+🧩 Exemple: [05-fat-arrow.js](05-fat-arrow.js)
+
+📘 [MDN – Arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 
 ---
 
-### 6. Paràmetres *rest*
-S'expressa amb ...*un_nom* i recull un nombre variable d’arguments passats a una funció. D'aquesta manera podem referir-nos d'una banda als paràmetres principals que sabem que són fixes i a continuació amb els `...` a la resta de paràmetres quan estem definint la funció. És més versàtil que `arguments` i es pot fer servir també en les *arrow functions*.
+## 6. Paràmetres rest
+
+Un paràmetre rest, escrit amb `...`, recull en un array els arguments que queden després dels paràmetres anteriors. Ha de ser l'últim paràmetre de la definició.
+
 ```js
-function concat(sep, ...paraules) {
-  return paraules.join(sep);
+function concat(separador, ...paraules) {
+  return paraules.join(separador);
 }
-console.log(concat("-", "Hola", "que", "tal")); // "Hola-que-tal"
+
+console.log(concat("-", "Hola", "què", "tal")); // "Hola-què-tal"
 ```
-🧩 Exemple: [06-rest.js](./06-rest.js)  
-[📘 MDN — Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)
+
+Els paràmetres rest funcionen també amb arrow functions.
+
+🧩 Exemple: [06-rest.js](06-rest.js)
+
+📘 [MDN – Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)
 
 ---
 
-### 7. Paràmetres i valors per defecte
-Pots donar **valors per defecte** als paràmetres d’una funció perquè, si no es rep cap valor en cridar-la, utilitzi aquest valor per omissió.
-Això permet que la funció sigui més flexible i eviti errors quan no es passen tots els arguments.
-També pots combinar paràmetres amb i sense valor per defecte, però els que tenen valor per defecte han d'anar al final:
+## 7. Paràmetres per defecte
+
+Un paràmetre pot tenir un valor per defecte, que s'utilitza quan l'argument corresponent s'omet o és `undefined`.
+
 ```js
 function saluda(nom = "anònim", salutacio = "Hola") {
   return `${salutacio}, ${nom}!`;
 }
-console.log(saluda());             // "Hola, anònim!"
-console.log(saluda("Jordi"));      // "Hola, Jordi!"
+
+console.log(saluda()); // "Hola, anònim!"
+console.log(saluda("Jordi")); // "Hola, Jordi!"
 ```
-🧩 Exemple: [07-parametres.js](./07-parametres.js)  
-[📘 MDN — Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
+
+Es poden definir paràmetres obligatoris després d'un paràmetre amb valor per defecte, però les crides posicionals poden requerir passar `undefined` explícitament per utilitzar el valor per defecte i continuar amb els arguments següents. Sovint és més clar agrupar moltes opcions en un objecte.
+
+🧩 Exemple: [07-parametres.js](07-parametres.js)
+
+📘 [MDN – Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
 
 ---
 
-### 8. Desestructuració de paràmetres
-La **desestructuració de paràmetres** permet extreure directament valors concrets d’un objecte o d’un array a la mateixa definició de la funció.
-Això fa el codi més llegible i evita haver d’escriure moltes línies per accedir als camps o elements.
+## 8. Desestructuració de paràmetres
 
-També pots assignar valors per defecte per si algun camp no existeix.
+La desestructuració permet extreure propietats d'un objecte o elements d'un array directament a la definició dels paràmetres.
+
 ```js
-// Amb objectes
 function mostraUsuari({ nom, edat = 18 }) {
   console.log(`${nom} té ${edat} anys.`);
 }
 
 mostraUsuari({ nom: "Anna", edat: 22 }); // Anna té 22 anys.
-mostraUsuari({ nom: "Pau" });            // Pau té 18 anys. (valor per defecte)
-//Amb Arrays
+mostraUsuari({ nom: "Pau" }); // Pau té 18 anys.
+```
+
+També es pot desestructurar un array:
+
+```js
 function mostraCoords([x, y, z = 0]) {
   console.log(`x=${x}, y=${y}, z=${z}`);
 }
 
-mostraCoords([5, 10]);       // x=5, y=10, z=0 (valor per defecte)
-mostraCoords([3, 4, 7]);     // x=3, y=4, z=7
-
+mostraCoords([5, 10]); // x=5, y=10, z=0
 ```
-Avantatges:
-- El codi és més net i fàcil d’entendre.
-- Pots donar valors per defecte fàcilment.
-- Evites accedir manualment a cada propietat (obj.nom, obj.edat, etc.).  
-  
-🧩 Exemple: [08-param-destructuring.js](./08-param-destructuring.js)  
-[📘 MDN — Destructuring ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring)
+
+🧩 Exemple: [08-param-destructuring.js](08-param-destructuring.js)
+
+📘 [MDN – Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 
 ---
 
-### 9. Getters i Setters
-Permeten encapsular lectura/escriptura de propietats d’objectes o classes.
+## 9. Getters i setters
+
+Els getters i setters defineixen com es llegeix o s'assigna una propietat. Es fan servir com si fossin propietats, sense cridar-los com a funcions.
+
 ```js
 const persona = {
   _nom: "Jordi",
-  get nom() { return this._nom; },
-  set nom(v) { this._nom = v.trim(); }
+  get nom() {
+    return this._nom;
+  },
+  set nom(valor) {
+    this._nom = valor.trim();
+  }
 };
+
 persona.nom = "  Marta  ";
 console.log(persona.nom); // "Marta"
 ```
-🧩 Exemple: [09-getters-setters.js](./09-getters-setters.js)  
-[📘 MDN — Get ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)  
-[📘 MDN — Set ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)
+
+🧩 Exemple: [09-getters-setters.js](09-getters-setters.js)
+
+📚 **Referència:**
+- [MDN – `get`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
+- [MDN – `set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set)
 
 ---
 
-### 10. Gestió d’errors amb `try…catch`
-Les funcions poden **llançar** excepcions amb `throw` i mostrar errors. Controla’ls amb `try…catch` (i opcionalment `finally`).
+## 10. Gestió d'errors
+
+Una funció pot indicar que no pot completar una operació llançant una excepció amb `throw`. El bloc `try...catch` permet capturar-la i gestionar-la.
+
 ```js
 function dividir(a, b) {
-  if (b === 0) throw new Error("No es pot dividir per zero");
+  if (b === 0) {
+    throw new Error("No es pot dividir per zero");
+  }
   return a / b;
 }
+
 try {
   console.log(dividir(10, 0));
-} catch (e) {
-  console.log("Error:", e.message);
+} catch (error) {
+  console.log("Error:", error.message);
 }
 ```
-Si vols mostrar els errors de manera elegant pots fer servir [SweetAlert2](https://sweetalert2.github.io/)  
-🧩 Exemple: [10-try-catch.js](./10-try-catch.js)  
-[📘 MDN — Try...catch ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)  
-[🚀 Sentry.io — Plataforma per Centralitzar Errors ](https://sentry.io/)
+
+🧩 Exemple: [10-try-catch.js](10-try-catch.js)
+
+📚 **Referència:**
+- [MDN – `throw`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw)
+- [MDN – `try...catch`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
 
 ---
 
-### 11. `this` bàsic
-La paraula reservada this fa referència al context d’execució actual, és a dir, a l’objecte que “posa en marxa” la funció. El seu valor depèn de com s’invoca la funció:
-| Context                                    | Valor de `this`                                |
-| ------------------------------------------ | ---------------------------------------------- |
-| Dins d’un **mètode d’un objecte**          | L’objecte mateix                               |
-| En una **funció normal**                   | `window` (al navegador) o `global` (a Node.js) |
-| En una **funció constructora** (amb `new`) | El nou objecte creat                           |
+## 11. El valor de `this`
+
+En una funció tradicional, el valor de `this` depèn de **com es crida la funció**:
+
+| Crida | Valor de `this` |
+| --- | --- |
+| `objecte.metode()` | L'objecte abans del punt |
+| `new Constructor()` | La nova instància |
+| Crida directa `funcio()` | `undefined` en mode estricte; en mode no estricte es substitueix pel global de l'entorn |
 
 ```js
-// Dins d’un objecte
 const cotxe = {
-  marca: 'Toyota',
+  marca: "Toyota",
   mostrar() {
-    console.log(this.marca); // → "Toyota"
+    console.log(this.marca);
   }
 };
-cotxe.mostrar();
 
-// Fora d’un objecte (funció normal)
-function mostrarMarca() {
-  console.log(this); // → window (navegador) o global (node.js)
-}
-mostrarMarca();
-
-// Amb constructor
-function Cotxe(marca) {
-  this.marca = marca;
-  console.log(this); // → nova instància 
-}
-const c1 = new Cotxe('Honda'); // → Cotxe { marca: 'Honda' }
+cotxe.mostrar(); // "Toyota"
 ```
-🧩 Exemple: [11-this.js](./11-this.js)  
-[📘 MDN — this ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
+
+El mode estricte és l'habitual en mòduls JavaScript. Per això no és correcte assumir que una crida directa a una funció sempre té `window` o `global` com a `this`.
+
+🧩 Exemple: [11-this.js](11-this.js)
+
+📘 [MDN – `this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
 
 ---
 
-### 12. Context de `this` 
-Les arrow functions **"hereten"** el `this` extern; els mètodes defineixen `this` pel receptor.
+## 12. `this` i arrow functions
+
+Una arrow function no crea un `this` propi: utilitza el `this` del context lèxic on s'ha definit. Això és útil, per exemple, dins d'una callback d'un mètode.
+
 ```js
 const usuari = {
-  nom: 'Laura',
-  saluda() {
-    // Funció normal
-    setTimeout(function() {
-      console.log(this.nom); //  undefined (this apunta a window/global)
-    }, 500);
-
-    // Arrow function
-    setTimeout(() => {
-      console.log(this.nom); //  "Laura" (hereta el this de saluda)
-    }, 1000);
+  nom: "Nico",
+  nacionalitats: ["Chile", "Colombia", "NZ"],
+  mostrarNacionalitats() {
+    this.nacionalitats.forEach(nacionalitat => {
+      console.log(this.nom, nacionalitat);
+    });
   }
 };
 
-usuari.saluda();
+usuari.mostrarNacionalitats();
 ```
-🧩 Exemple: [12-this-context.js](./12-this-context.js)  
-[📘 MDN — Arrow function ](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+
+🧩 Exemple: [12-this-context.js](12-this-context.js)
+
+📘 [MDN – Arrow functions i `this`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#cannot_be_used_as_methods)
 
 ---
 
-### 13. Canviant el context de `this` (`call`, `apply`, `bind`)
-Quan una funció es crida fora del seu objecte, el valor de `this` pot perdre’s (per exemple, passar a window o undefined).  
-Els mètodes `call()`, `apply()` i `bind()` permeten fixar manualment el valor de `this` perquè la funció s’executi amb el context desitjat.
-| Mètode                           | Què fa                                   | Arguments |
-| :------------------------------- | :--------------------------------------- |  :-------------------- |
-| `call(thisArg, arg1, arg2, ...)` | Crida la funció amb el `this` indicat     | Arguments separats    |
-| `apply(thisArg, [args])`         | Crida la funció amb el `this` indicat     | Array d’arguments     |
-| `bind(thisArg)`                  | Retorna una nova funció amb `this` fixat  | Es passen després     |
+## 13. `call()`, `apply()` i `bind()`
+
+Els mètodes `call()` i `apply()` criden una funció indicant el valor de `this`. `call()` rep els arguments separats; `apply()` els rep en un array o objecte semblant a un array. `bind()` no crida la funció: en retorna una de nova amb `this` fixat.
 
 ```js
 function presentar(salutacio, lloc) {
   console.log(`${salutacio}, sóc ${this.nom} de ${lloc}`);
 }
 
-const persona = { nom: 'Aina' };
+const persona = { nom: "Aina" };
 
-//  call → passa els arguments un a un
-presentar.call(persona, 'Hola', 'Girona'); 
-// → "Hola, sóc Aina de Girona"
+presentar.call(persona, "Hola", "Girona");
+presentar.apply(persona, ["Bon dia", "Barcelona"]);
 
-//  apply → passa els arguments com un array
-presentar.apply(persona, ['Bon dia', 'Barcelona']); 
-// → "Bon dia, sóc Aina de Barcelona"
-
-//  bind → retorna una nova funció amb el this fixat
 const presentarAina = presentar.bind(persona);
-presentarAina('Ei', 'Tarragona'); 
-// → "Ei, sóc Aina de Tarragona"
-
+presentarAina("Ei", "Tarragona");
 ```
-🧩 Exemple: [13-canviant-context-this.js](./13-canviant-context-this.js)  
-[📘 MDN — call()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call)  
-[📘 MDN — apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)  
-[📘 MDN — bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
+
+🧩 Exemple: [13-canviant-context-this.js](13-canviant-context-this.js)
+
+📚 **Referència:**
+- [MDN – Function.prototype.call()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call)
+- [MDN – Function.prototype.apply()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply)
+- [MDN – Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind)
 
 ---
 
-## Recursos
+## 14. Exercicis
+
+Els exercicis permeten practicar callbacks, paràmetres rest, arrow functions, closures i funcions que transformen dades.
+
+📄 [Fitxers d'exercicis](Exercicis/)
+
+---
+
+## 📚 Referència general
+
 - [MDN – Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)
-- [MDN – Function declaration](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function)
-- [MDN – Function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function)
-- [MDN – Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
-- [MDN – Rest parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters)
-- [MDN – Default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters)
-- [MDN – Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
-- [MDN – Getters/Setters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects#defining_getters_and_setters)
-- [MDN – this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
-- [MDN – call / apply / bind](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)
-- [MDN – try...catch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch)
+- [MDN – Function reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions)
 - [MDN – Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
 - [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
