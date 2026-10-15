@@ -9,7 +9,7 @@ Cada secció inclou una explicació breu, un exemple, un enllaç al fitxer `.js`
 
 - [1. Declaracions i expressions de funció](#1-declaracions-i-expressions-de-funció)
 - [2. Àmbit i declaracions de variables](#2-àmbit-i-declaracions-de-variables)
-- [3. Closures](#3-closures)
+- [3. Àmbit (*scope*) i closures](#3-àmbit-scope-i-closures)
 - [4. L'objecte arguments](#4-lobjecte-arguments)
 - [5. Arrow functions](#5-arrow-functions)
 - [6. Paràmetres rest](#6-paràmetres-rest)
@@ -89,26 +89,52 @@ En general, per al codi nou és preferible utilitzar `const` quan no cal reassig
 
 ---
 
-## 3. Closures
+## 3. Àmbit (*scope*) i closures
 
-Una **closure** és una funció juntament amb l'entorn lèxic on s'ha creat. Per això, una funció interna pot continuar accedint a variables de la funció externa encara que aquesta ja hagi acabat.
+L'**àmbit** (*scope*) determina on es pot accedir a una variable. Una funció pot llegir variables definides en un àmbit exterior; si les reassigna, modifica aquella variable exterior.
+
+Al fitxer d'exemple, `fora` està declarada fora de `avast()`. La funció la pot llegir i canviar:
 
 ```js
-function creadorDeSumadors(a) {
-  return function (b) {
-    return a + b;
+let fora = "estic fora";
+
+function avast() {
+  console.log(fora); // "estic fora"
+  fora = "estic dins";
+}
+
+console.log(fora); // "estic fora"
+avast();
+console.log(fora); // "estic dins"
+```
+
+Les variables declarades dins d'una funció són locals i no s'hi pot accedir des de fora. `var` té àmbit de funció; `let` i `const` tenen àmbit de bloc. Aquestes diferències ja s'han introduït a l'[apartat 2](#2-àmbit-i-declaracions-de-variables).
+
+### Closure (*clausura*)
+
+Una **closure** és una funció que conserva l'accés a les variables del seu àmbit lèxic, fins i tot després que la funció externa hagi acabat. Així es pot mantenir un estat privat entre crides:
+
+```js
+function generadorDeTorns() {
+  let torn = 1;
+
+  return function () {
+    return torn++;
   };
 }
 
-const suma5 = creadorDeSumadors(5);
-console.log(suma5(2)); // 7
+const demanarTorn = generadorDeTorns();
+console.log(demanarTorn()); // 1
+console.log(demanarTorn()); // 2
 ```
 
-Les closures permeten conservar estat privat entre crides d'una funció.
+La closure es reprèn a [l'apartat 11 del resum d'objectes](../05-objectes/resum-objectes.md#11-propietats-públiques-i-privades), on s'utilitza per encapsular dades privades.
 
 🧩 Exemple: [03-ambit.js](03-ambit.js)
 
-📘 [MDN – Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
+📚 **Referència:**
+- [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
+- [MDN – Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
 
 ---
 

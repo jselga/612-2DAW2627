@@ -6,9 +6,9 @@
 //Fat arrow functions
 // No tenen ARGUMENTS
 // ni super ni context this
-const suma = (a,b)=>{
+const suma = (a, b) => {
     return Array.from(arguments)
-        .reduce((acc,el)=>acc+el);
+        .reduce((acc, el) => acc + el);
 }
 
-console.log(suma(1,2,3,4));
+console.log(suma(1, 2, 3, 4));

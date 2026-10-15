@@ -1,7 +1,7 @@
 let fora = 'estic fora'
 function avast() {
 
-    // console.log(fora);
+    console.log(fora);
     fora = 'estic dins'
     function salutacio() { }
     var vella = 'no utilitzar';
@@ -20,26 +20,26 @@ avast();
 console.log(fora);
 
 
-const generadorCues = function () {
-    let torn = 1; // Variable clausurada (private)
-    return function () {
-        return torn++;
-    }
-}
+// const generadorDeTorns = function () {
+//     let torn = 1; // Variable clausurada (private)
+//     return function () {
+//         return torn++;
+//     }
+// }
 
-demanarTornPa = generadorDeTorns();
+// demanarTornPa = generadorDeTorns();
 
-demanarTornPeix = generadorDeTorns();
+// demanarTornPeix = generadorDeTorns();
 
-console.log("Pa torn " + demanarTornPa());
-console.log("Peix torn " + demanarTornPeix());
-console.log("Pa torn " + demanarTornPa());
-console.log("Pa torn " + demanarTornPa());
-console.log("Pa torn " + demanarTornPa());
-console.log("Peix torn " + demanarTornPeix());
-console.log("Pa torn " + demanarTornPa());
-console.log("Pa torn " + demanarTornPa());
-console.log("Peix torn " + demanarTornPeix());
-console.log("Peix torn " + demanarTornPeix());
-console.log("Peix torn " + demanarTornPeix());
-console.log("Pa torn " + demanarTornPa());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Peix torn " + demanarTornPeix());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Peix torn " + demanarTornPeix());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Pa torn " + demanarTornPa());
+// console.log("Peix torn " + demanarTornPeix());
+// console.log("Peix torn " + demanarTornPeix());
+// console.log("Peix torn " + demanarTornPeix());
+// console.log("Pa torn " + demanarTornPa());
