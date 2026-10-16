@@ -1,14 +1,14 @@
 function suma(a, b) {
-    // console.log(arguments);
+    console.log(arguments);
 
-    // return a +b;
+    // return a + b;
     // let total = 0;
     // // Forma prèvia a ES6
     // for (let valor of arguments){
     //     total+=valor;
     // }
     // return total;
-    // // Forma moderna
+    // Forma moderna
     return Array.from(arguments)
         .reduce((acc, el) => acc + el)
 }
