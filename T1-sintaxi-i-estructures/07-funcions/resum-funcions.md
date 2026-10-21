@@ -7,10 +7,12 @@ Cada secció inclou una explicació breu, un exemple, un enllaç al fitxer `.js`
 
 ## Índex
 
+- [Índex](#índex)
 - [1. Declaracions i expressions de funció](#1-declaracions-i-expressions-de-funció)
 - [2. Àmbit i declaracions de variables](#2-àmbit-i-declaracions-de-variables)
 - [3. Àmbit (*scope*) i closures](#3-àmbit-scope-i-closures)
-- [4. L'objecte arguments](#4-lobjecte-arguments)
+  - [Closure (*clausura*)](#closure-clausura)
+- [4. L'objecte `arguments`](#4-lobjecte-arguments)
 - [5. Arrow functions](#5-arrow-functions)
 - [6. Paràmetres rest](#6-paràmetres-rest)
 - [7. Paràmetres per defecte](#7-paràmetres-per-defecte)
@@ -21,7 +23,7 @@ Cada secció inclou una explicació breu, un exemple, un enllaç al fitxer `.js`
 - [12. `this` i arrow functions](#12-this-i-arrow-functions)
 - [13. `call()`, `apply()` i `bind()`](#13-call-apply-i-bind)
 - [14. Exercicis](#14-exercicis)
-- [Referència general](#-referència-general)
+- [📚 Referència general](#-referència-general)
 
 ---
 
@@ -85,7 +87,10 @@ En general, per al codi nou és preferible utilitzar `const` quan no cal reassig
 - [MDN – `var` i hoisting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var#hoisting)
 - [MDN – `let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
 - [MDN – `const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
-- [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
+- [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)  
+- [🎞️ @Carlos Azaustre | Youtube Shorts — Hoisting](https://www.youtube.com/shorts/h-XhhALKm2U)     
+- [🎞️ @makigas | Youtube Shorts — Let vs Var](https://youtube.com/shorts/cFD9bB3UEtY?si=HeBUC9GPeSzY-7xz)  
+- [📼 @TodoCode | Youtube — Var, Let y Const](https://www.youtube.com/watch?v=a8SJJPvkGIE)  
 
 ---
 
@@ -135,6 +140,7 @@ La closure es reprèn a [l'apartat 11 del resum d'objectes](../05-objectes/resum
 📚 **Referència:**
 - [MDN – Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
 - [MDN – Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
+- [📼 @Carlos Azaustre | Youtube — Scope en JS](https://www.youtube.com/watch?v=7zxSu_xlhTE)
 
 ---
 
