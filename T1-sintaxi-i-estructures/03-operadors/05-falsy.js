@@ -21,9 +21,13 @@ function fn2(){
 let x = fn1() && fn2();
 
 
+
+
+let valor1 =1;
+let valor2=10;
+console.log(valor1 || valor2);
+console.log(valor1 && valor2);
  // Truthy
-
-
 // [] || {}
 // []
 // [] && {}

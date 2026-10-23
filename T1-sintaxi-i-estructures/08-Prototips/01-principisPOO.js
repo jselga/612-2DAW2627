@@ -56,6 +56,8 @@ function validaEntitat(entitat) {
     function validaEntitat(entitat) {
         entitat.save();
     }
-
-
+    let user2 = new User("Bob","bob@esponja.net");
+validaEntitat(user2);
+    let moto = new Moto("Impala","Rieju")
+validaEntitat(moto);
 

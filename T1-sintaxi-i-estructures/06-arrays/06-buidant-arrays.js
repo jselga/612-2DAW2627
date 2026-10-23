@@ -4,19 +4,20 @@
 // console.log(arr2,arr);
 
 
-// Forma comú
+// // Forma comú
 // let arr = [1, 2];
 // arr.length =0;
 // console.log(arr);
 
 
 
-// Forma explícita
+// // Forma explícita
 // let arr = [1, 2];
-// arr.splice(0,arr.length);
+// arr.splice(0, arr.length);
+
 // console.log(arr);
 
-// Més recursos. Evitar utilitzar!
+// // Més recursos. Evitar utilitzar!
 // let arr = [1, 2];
 // while (arr.length >0){
 //     arr.pop();
