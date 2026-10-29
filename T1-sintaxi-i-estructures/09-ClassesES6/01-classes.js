@@ -18,6 +18,7 @@ class User{
         this.instance =function(){}
     }
     active = true;
+    
     // És equivalent a afegir-ho mitjançant el prototype
     login() {
         console.log("Hello");

@@ -16,7 +16,8 @@ class Restaurants {
 const r = Restaurants.getRestaurant(12);
 console.log(r);
 
-// const arr = new Array();
+const arr = new Array();
+
 // Array.isArray();
 // Array.from();
 // Object.assign();
