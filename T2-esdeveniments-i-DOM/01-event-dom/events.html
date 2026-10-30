@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      img {
+        display: block;
+        border: solid 5px #0000ff;
+        width: 200px;
+        height: 200px;
+      }
+      .destacat {
+        background: #ffeb3b;
+      }
+    </style>
+    <title>Events Exemple</title>
+  </head>
+  <body>
+    <div>
+      <h1 id="mouseNkey">Esdeveniments de ratolí i teclat</h1>
+      <img src="./Exercicis2/img/gnu.jpg" alt="gnu" />
+    </div>
+    <div>
+      <h1 id="delegation">Delegació d'esdeveniments</h1>
+      <p id="info" style="visibility: hidden; color: #555"></p>
+      <ul id="llista">
+        <li>Element 1</li>
+        <li>Element 2</li>
+        <li>Element 3</li>
+      </ul>
+    </div>
+    <script defer>
+      const imatge = document.querySelector("img");
+      imatge.addEventListener(
+        "mouseenter",
+        () => (imatge.style.borderColor = "red")
+      );
+      imatge.addEventListener(
+        "mouseleave",
+        () => (imatge.style.borderColor = "black")
+      );
+      document.addEventListener("keydown", (e) => {
+        console.log(`Has premut: ${e.key}`);
+      });
+
+      const llista = document.getElementById("llista");
+      const info = document.querySelector("#info");
+      llista.addEventListener("click", (e) => {
+        const li = e.target.closest("li");
+        if (!li) {
+          info.textContent = "Clica sobre un element de la llista.";
+          info.style.visibility = "visible";
+          llista.querySelectorAll(".destacat").forEach((el) => {
+            el.classList.remove("destacat");
+          });
+          return;
+        }
+        li.classList.toggle("destacat");
+        info.style.visibility = "hidden";
+      });
+    </script>
+  </body>
+</html>

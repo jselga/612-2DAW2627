@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="pare">
+      <button id="fill">Fes clic</button>
+    </div>
+    <script defer>
+      const pare = document.getElementById("pare");
+      const fill = document.getElementById("fill");
+
+      pare.addEventListener("click", () => console.log("Pare"));
+      fill.addEventListener("click", (e) =>{
+        // e.stopPropagation();  // Descomentar per aturar la propagació 
+        console.log("Fill");
+    });
+
+    </script>
+  </body>
+</html>

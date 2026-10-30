@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Event</title>
+  </head>
+  <body>
+    <div id="paleta">
+      <button data-color="red">Vermell</button>
+      <button data-color="green">Verd</button>
+      <button data-color="blue">Blau</button>
+    </div>
+
+    <div
+      id="caixa"
+      style="width: 150px; height: 150px; background: #ddd; margin-top: 1rem"
+    ></div>
+    <script>
+      const COLOR_CHANGE = "color-change";
+
+      // Listener global del CustomEvent
+      window.addEventListener(COLOR_CHANGE, (e) => {
+        const caixa = document.getElementById("caixa");
+        caixa.style.backgroundColor = e.detail.color;
+      });
+
+      // Delegació d'esdeveniments per a la paleta
+      const paleta = document.getElementById("paleta");
+      paleta.addEventListener("click", (e) => {
+        const boto = e.target.closest("button");
+        if (!boto) return;
+
+        const color = boto.dataset.color;
+
+        // Emetem un CustomEvent amb el color seleccionat
+        paleta.dispatchEvent(
+          new CustomEvent(COLOR_CHANGE, {
+            bubbles: true,
+            detail: { color },
+          })
+        );
+      });
+    </script>
+  </body>
+</html>
