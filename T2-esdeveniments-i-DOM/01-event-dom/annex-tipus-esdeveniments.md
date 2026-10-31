@@ -1,137 +1,109 @@
-# Bloc 1B — Annex: Tipus d’esdeveniments i on s'utilitzen 
+# Annex: tipus d'esdeveniments
 
-Aquesta guia complementària serveix per saber **quins esdeveniments tenen sentit en quins elements HTML**, i en quins no. En els materials principals treballem amb `addEventListener`, però és útil conèixer quina mena d’esdeveniments són aplicables a cada tipus d'element.
+Aquest annex complementa el [resum d'esdeveniments](./resum-esdeveniments.md) i agrupa esdeveniments habituals segons la interacció o els elements amb què s'utilitzen.
 
----
+## Índex
 
-
-## 1. Introducció
-No tots els elements HTML generen els mateixos esdeveniments. Per exemple:
-- Un `<form>` pot generar `submit`, però un `<div>` no.
-- Un `<input>` genera `input` i `change`, però una `<img>` no.
-- Quasi tots els elements poden rebre `click`, però no tots poden rebre `keydown`.
-
-Aquesta guia dóna una visió clara perquè l’alumnat no faci servir esdeveniments innecessaris o impossibles en cada element.
+- [1. Ratolí i punter](#1-ratolí-i-punter)
+- [2. Teclat i focus](#2-teclat-i-focus)
+- [3. Formularis i camps editables](#3-formularis-i-camps-editables)
+- [4. Càrrega i recursos](#4-càrrega-i-recursos)
+- [5. Quin element rep l'esdeveniment?](#5-quin-element-rep-lesdeveniment)
+- [Referències](#referències)
 
 ---
 
-## 2. Esdeveniments globals (funcionen a molts elements)
-Aquests esdeveniments poden aparèixer a pràcticament qualsevol element:
+## 1. Ratolí i punter
 
 | Esdeveniment | Descripció |
-|--------------|------------|
-| `click` | Clic simple |
+|---|---|
+| `click` | Activació d'un element amb el punter |
 | `dblclick` | Doble clic |
-| `mousedown` / `mouseup` | Botó del ratolí avall / amunt |
+| `mousedown` / `mouseup` | Premuda / alliberament d'un botó del ratolí |
 | `mousemove` | Moviment del ratolí |
-| `mouseenter` / `mouseleave` | Entrada/sortida del punter |
-| `wheel` | Gest o roda del ratolí |
-| `contextmenu` | Clic dret (obre menú contextual) |
+| `mouseenter` / `mouseleave` | Entrada / sortida del punter d'un element |
+| `contextmenu` | Obertura del menú contextual, habitualment amb clic dret |
+| `wheel` | Moviment de la roda o gest de desplaçament |
 
-Són útils en elements visuals com `<div>`, `<img>`, `<button>`, però poden aplicar-se quasi a qualsevol element.
-
----
-
-## 3. Esdeveniments específics de formularis
-Només tenen sentit en **controls de formulari** (`input`, `textarea`, `select`, `form`).
-
-| Esdeveniment | Elements |
-|--------------|----------|
-| `input` | `input`, `textarea` |
-| `change` | `input`, `textarea`, `select` |
-| `submit` | `form` |
-| `reset` | `form` |
-| `invalid` | Qualsevol camp de formulari amb validació HTML5 |
-
-Exemples:
-- `input` es dispara mentre l’usuari escriu.
-- `change` es dispara quan l’usuari surt del camp.
-- `submit` només existeix per `<form>`.
+Els **Pointer Events** (`pointerdown`, `pointerup`, `pointermove`, entre d'altres) ofereixen una interfície comuna per a ratolí, llapis i pantalles tàctils. Tria els esdeveniments que s'ajustin al dispositiu i a la interacció que necessites.
 
 ---
 
-## 4. Esdeveniments de teclat
-Funcionen en elements **focusables**, especialment:
-- `document` (per teclat global)
-- `input`, `textarea`
-- Elements amb `tabindex`
+## 2. Teclat i focus
 
-| Esdeveniment | Notes |
-|--------------|-------|
-| `keydown` | Dispara quan la tecla s'abaixa |
-| `keyup` | Quan s'allibera |
-| `keypress` | Obsolet, no recomanat |
+| Esdeveniment | Descripció |
+|---|---|
+| `keydown` | Es dispara en prémer una tecla |
+| `keyup` | Es dispara en alliberar una tecla |
+| `keypress` | Obsolet; evita utilitzar-lo en codi nou |
+| `focus` / `blur` | El focus entra a un element / en surt |
+| `focusin` / `focusout` | Com `focus` / `blur`, però participen en la propagació |
 
-Exemple:
+Els esdeveniments de teclat s'associen al context que té el focus. Es poden escoltar a `document` per a interaccions globals de la pàgina o directament en controls i altres elements enfocables.
+
 ```js
-document.addEventListener('keydown', (e) => {
-  console.log('Tecla premuda:', e.key);
+document.addEventListener("keydown", (event) => {
+  console.log("Tecla premuda:", event.key);
+});
+```
+
+Si és apropiat, es pot fer que un element que no rep el focus per defecte pugui rebre'l amb `tabindex`. No cal afegir `tabindex` als elements que ja són enfocables, com els botons i els camps de formulari.
+
+---
+
+## 3. Formularis i camps editables
+
+| Esdeveniment | Ús habitual |
+|---|---|
+| `input` | El valor d'un camp editable canvia; també s'utilitza en contingut editable |
+| `change` | El valor d'un control canvia i queda confirmat segons el tipus de control |
+| `submit` | S'envia un formulari (`form`) |
+| `reset` | Es reinicia un formulari |
+| `invalid` | Un control no supera la validació del formulari |
+
+Per exemple, `input` és útil per respondre mentre s'escriu; `change` s'utilitza quan el canvi queda confirmat. El moment exacte en què es dispara `change` depèn del tipus de control.
+
+Per gestionar l'enviament d'un formulari amb JavaScript, escolta `submit` al formulari mateix:
+
+```js
+const form = document.querySelector("form");
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // evita l'enviament/navegació per defecte
+  console.log("Formulari gestionat amb JavaScript");
 });
 ```
 
 ---
 
-## 5. Esdeveniments de ratolí i punter
-### Ratolí (antics)
-`click`, `mousemove`, `mousedown`, `mouseup`, `mouseenter`, `mouseleave`.
+## 4. Càrrega i recursos
 
-### Pointer Events (recomanat modern)
-`pointerdown`, `pointerup`, `pointermove`, `pointerenter`, `pointerleave`.
+| Esdeveniment | Ús habitual |
+|---|---|
+| `DOMContentLoaded` | El document HTML s'ha analitzat; no espera que acabin de carregar totes les imatges |
+| `load` | El document o un recurs, com una imatge, s'ha carregat |
+| `error` | Hi ha hagut un error en carregar un recurs |
 
-Funcionen en qualsevol element visible.
-
----
-
-## 6. Esdeveniments de càrrega i recursos
-Generats quan es carreguen fitxers o recursos:
-
-| Esdeveniment | Elements |
-|--------------|----------|
-| `load` | `window`, `<img>`, `<script>`, `<link>` |
-| `error` | Igual que `load`, però en cas d'error |
-
-Exemple per imatge:
 ```js
-const img = document.querySelector('img');
-img.addEventListener('load', () => console.log('Imatge carregada'));
+const imatge = document.querySelector("img");
+imatge.addEventListener("load", () => console.log("Imatge carregada"));
+imatge.addEventListener("error", () => console.log("No s'ha pogut carregar"));
 ```
 
 ---
 
-## 7. Esdeveniments que **no** funcionen en certs elements
-| Esdeveniment | No aplicable a |
-|--------------|----------------|
-| `submit` | qualsevol element que **no** sigui un `<form>` |
-| `input` | `<div>`, `<img>`, `<button>`… només controls |
-| `change` | igual que `input`, només controls |
-| `keydown` | elements que no poden tenir focus |
+## 5. Quin element rep l'esdeveniment?
 
-Exemple incorrecte:
-```js
-div.addEventListener('submit', ...) // No funciona
-```
+El tipus d'esdeveniment i l'element que el rep depenen de la interacció. Per exemple, `submit` s'emet en enviar un formulari; `input` correspon a camps editables; un esdeveniment de teclat s'adreça al context enfocat. En canvi, un clic pot originar-se en molts tipus d'elements.
+
+No es pot determinar de manera fiable si una interacció tindrà lloc comprovant només si existeix una propietat com `onclick` o `onchange` a l'objecte. La disponibilitat d'una propietat handler no demostra que un esdeveniment natiu concret es generi amb una acció de l'usuari. Consulta la documentació de l'esdeveniment i prova la interacció necessària.
 
 ---
 
-## 8. Com comprovar si un element admet un esdeveniment
-Truc útil per a l’alumnat:
-```js
-const el = document.querySelector('div');
-console.log('onchange' in el);   // false
-console.log('onclick' in el);    // true
-```
+## Referències
 
-Si retorna `true`, l’element pot tenir aquest esdeveniment (encara que recomanem `addEventListener`).
-
----
-
-## Resum final
-- Alguns esdeveniments són universals, altres específics.
-- Formularis → `input`, `change`, `submit`.
-- Teclat → elements focusables o `document`.
-- Recursos → `load`, `error`.
-- Evitar listeners absurds (`submit` a un div, `input` a una img).
-- Fer servir `addEventListener` sempre.
-
-
-
+- [MDN – Introduction to events](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
+- [MDN – `PointerEvent`](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent)
+- [MDN – `KeyboardEvent`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+- [MDN – `InputEvent`](https://developer.mozilla.org/en-US/docs/Web/API/InputEvent)
+- [MDN – `SubmitEvent`](https://developer.mozilla.org/en-US/docs/Web/API/SubmitEvent)
+- [MDN – `DOMContentLoaded`](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event)

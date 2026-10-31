@@ -1,263 +1,278 @@
-# Bloc 1B — Esdeveniments del DOM
+# Resum sobre esdeveniments del DOM
+
+Aquest document és una **referència** sobre com escoltar i gestionar esdeveniments al navegador: del registre d'un listener a la propagació, la delegació i els esdeveniments personalitzats.
+
+[📚 **Referència general**](#referència-general)
 
 ## Índex
-- [Bloc 1B — Esdeveniments del DOM](#bloc-1b--esdeveniments-del-dom)
-  - [Índex](#índex)
-  - [Introducció als esdeveniments](#introducció-als-esdeveniments)
-  - [Models de gestió d’esdeveniments](#models-de-gestió-desdeveniments)
-    - [Model antic (nivell 0) — *no recomanat*](#model-antic-nivell-0--no-recomanat)
-    - [Model modern (nivell 2)](#model-modern-nivell-2)
-  - [L’objecte Event](#lobjecte-event)
-    - [Propietats principals](#propietats-principals)
-  - [Propagació i fases](#propagació-i-fases)
-  - [Esdeveniments de ratolí i teclat](#esdeveniments-de-ratolí-i-teclat)
-    - [Ratolí](#ratolí)
-    - [Exemple](#exemple)
-    - [Teclat](#teclat)
-  - [Delegació d’esdeveniments](#delegació-desdeveniments)
-    - [Exemple](#exemple-1)
-  - [CustomEvent i comunicació entre components](#customevent-i-comunicació-entre-components)
-    - [Creació i emissió](#creació-i-emissió)
-    - [Escolta d’un CustomEvent](#escolta-dun-customevent)
-  - [Exemples](#exemples)
-  - [Recursos oficials](#recursos-oficials)
-  - [Annex: Tipus d'esdeveniments](#annex-tipus-desdeveniments)
+
+- [1. Esdeveniments, listeners i handlers](#1-esdeveniments-listeners-i-handlers)
+- [2. Registrar i eliminar listeners](#2-registrar-i-eliminar-listeners)
+- [3. L'objecte `Event`](#3-lobjecte-event)
+- [4. Propagació dels esdeveniments](#4-propagació-dels-esdeveniments)
+- [5. Ratolí, teclat i formularis](#5-ratolí-teclat-i-formularis)
+- [6. Delegació d'esdeveniments](#6-delegació-desdeveniments)
+- [7. Esdeveniments personalitzats](#7-esdeveniments-personalitzats)
+- [8. Arrossegar i deixar anar](#8-arrossegar-i-deixar-anar)
+- [📚 Referència general](#referència-general)
 
 ---
 
-## Introducció als esdeveniments
-Els **esdeveniments** permeten que el codi JavaScript reaccioni a accions de l’usuari o del navegador, com clics, tecles premudes, moviments del ratolí o canvis al DOM.
+## 1. Esdeveniments, listeners i handlers
 
-Un ***listener*** és el mecanisme que escolta un esdeveniment, mentre que el ***handler*** és la funció que s’executa quan l’esdeveniment té lloc. En altres paraules: el ***listener*** registra l’esdeveniment, i el ***handler*** n’és la resposta.
+Un **esdeveniment** és un senyal que indica que ha passat alguna cosa, com ara un clic, una tecla premuda o l'enviament d'un formulari. Un **handler** és la funció que respon a l'esdeveniment; un **listener** és el registre que associa aquesta funció a un tipus d'esdeveniment i a un objecte.
 
 ```js
-// Handler (funció que s'executarà)
-const handler = (e) => {
-  console.log("Has fet clic!");
-};
+const button = document.querySelector("button");
 
-// Listener (registra l’esdeveniment + el handler)
-button.addEventListener('click', handler);
+function gestionaClic(event) {
+  console.log("S'ha fet clic", event.type);
+}
+
+button.addEventListener("click", gestionaClic);
 ```
-També podem afegir un ***listener*** amb un ***handler*** implícit com a *arrow function*
+
+🧩 Exemple: [05-esdeveniments.js](./05-esdeveniments.js)
+
+📚 [MDN – Introduction to events](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
+
+---
+
+## 2. Registrar i eliminar listeners
+
+La forma recomanada és `addEventListener()`. Un mateix element pot tenir diversos listeners per al mateix esdeveniment. Per eliminar-ne un, cal passar a `removeEventListener()` la mateixa funció i les mateixes opcions de captura utilitzades en registrar-lo.
+
 ```js
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('El document ja està llest.');
+function mostraMissatge() {
+  console.log("Clic");
+}
+
+button.addEventListener("click", mostraMissatge);
+button.removeEventListener("click", mostraMissatge);
+```
+
+Per controlar la captura, es pot indicar `capture`; l'opció `once` elimina el listener després de la primera execució:
+
+```js
+element.addEventListener("click", mostraMissatge, { capture: true, once: true });
+```
+
+La propietat `onclick` és una forma més antiga. Només manté un handler per propietat: assignar-ne un de nou reemplaça l'anterior i assignar `null` l'elimina.
+
+```js
+button.onclick = () => console.log("Clic");
+button.onclick = null;
+```
+
+🧩 Exemple: [05-esdeveniments.js](./05-esdeveniments.js)
+
+📚 **Referències:**
+- [MDN – `addEventListener()`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
+- [MDN – `removeEventListener()`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener)
+
+---
+
+## 3. L'objecte `Event`
+
+El navegador passa a la funció handler un objecte amb informació sobre l'esdeveniment.
+
+| Propietat | Significat |
+|---|---|
+| `type` | Tipus d'esdeveniment, per exemple `click` |
+| `target` | Element on s'ha originat l'esdeveniment |
+| `currentTarget` | Element on està registrat el listener que s'està executant |
+| `bubbles` | Indica si l'esdeveniment es propaga cap amunt |
+| `detail` | Dades addicionals d'un `CustomEvent` |
+
+```js
+button.addEventListener("click", (event) => {
+  console.log(event.type); // "click"
+  console.log(event.target.tagName); // "BUTTON"
+  console.log(event.currentTarget === button); // true
 });
 ```
 
-📘 [MDN — Introduction to Events](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
+`target` i `currentTarget` poden ser diferents, especialment quan el listener és en un element pare i l'esdeveniment s'hi propaga.
+
+📚 [MDN – `Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event)
 
 ---
 
-## Models de gestió d’esdeveniments
+## 4. Propagació dels esdeveniments
 
-### Model antic (nivell 0) — *no recomanat*
-Assignar directament una funció a una propietat com `onclick`:
-```js
-button.onclick = function() {
-  alert('Has fet clic');
-};
-```
+Els esdeveniments que es propaguen recorren aquestes fases:
 
-Només permet **una funció per tipus d’esdeveniment** i **no es pot eliminar fàcilment**.
-
-### Model modern (nivell 2)
-El mètode recomanat és `addEventListener()`:
-```js
-button.addEventListener('click', () => {
-  alert('Clic modern!');
-});
-```
-Per eliminar-lo:
-```js
-const handler = () => alert('Adeu listener');
-button.addEventListener('click', handler);
-button.removeEventListener('click', handler);
-```
-
-📘 [MDN — addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)   
-📘 [MDN — removeEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener)
-
----
-
-## L’objecte Event
-Quan es dispara un esdeveniment, el ***listener*** "ho detecta" i el navegador passa automàticament un objecte `Event` a la funció ***handler***
-
-### Propietats principals
-| Propietat | Descripció |
-|------------|-------------|
-| `type` | Nom de l’esdeveniment (p. ex. `click`) |
-| `target` | Element on s’ha originat l’esdeveniment |
-| `currentTarget` | Element on s’executa el ***listener*** |
-| `bubbles` | Indica si l’esdeveniment participa en la propagació |
-| `detail` | Informació addicional en alguns esdeveniments o `CustomEvent` |
-
-```js
-button.addEventListener('click', (e) => {
-  console.log(e.type);          // "click"
-  console.log(esdeveniment.target.tagName); // "BUTTON"
-});
-```
-
-📘 [MDN — Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
-
----
-
-## Propagació i fases
-Els esdeveniments passen per **tres fases**:
-1. **Capturing**: des de l’arrel fins a l’element objectiu.
-2. **Target**: sobre l’element on ocorre l’esdeveniment.
-3. **Bubbling**: torna cap amunt a través dels pares.
+1. **Captura (*capturing*):** des de l'arrel del document cap a l'element objectiu.
+2. **Objectiu (*target*):** arriben a l'element que ha originat l'esdeveniment.
+3. **Bombolleig (*bubbling*):** tornen des de l'objectiu pels seus elements ancestres.
 
 ```html
 <div id="pare">
   <button id="fill">Fes clic</button>
 </div>
 ```
-```js
-const pare = document.getElementById('pare');
-const fill = document.getElementById('fill');
 
-pare.addEventListener('click', () => console.log('Pare'));
-fill.addEventListener('click', () => console.log('Fill'));
+```js
+const pare = document.getElementById("pare");
+const fill = document.getElementById("fill");
+
+pare.addEventListener("click", () => console.log("Pare, bubbling"));
+pare.addEventListener("click", () => console.log("Pare, captura"), { capture: true });
+fill.addEventListener("click", () => console.log("Fill"));
 ```
 
-**Resultat:** `Fill` → `Pare` (fase bubbling)  
+En fer clic al botó s'executa primer el listener de captura del pare, després el del botó i, finalment, el listener de bombolleig del pare.
 
-🧩 **Exemple:** [propagacio.html](./propagacio.html)  
-Per evitar que es propaguin:
-```js
-esdeveniment.stopPropagation();
-```
+- `event.stopPropagation()` atura la propagació cap a altres elements de la cadena.
+- `event.preventDefault()` evita l'acció per defecte, si l'esdeveniment és cancel·lable; no atura la propagació.
 
-📘 [MDN — Event bubbling and capture](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#esdeveniment_bubbling_and_capture)
+🧩 Exemple: [propagacio.html](./propagacio.html)
+
+📚 [MDN – Event bubbling and capture](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_bubbling_and_capture)
 
 ---
 
-## Esdeveniments de ratolí i teclat
+## 5. Ratolí, teclat i formularis
 
-### Ratolí
-| Esdeveniment | Descripció |
-|---------------|-------------|
-| `click` | Clic simple |
+### Ratolí i punter
+
+| Esdeveniment | Quan s'activa |
+|---|---|
+| `click` | Activació d'un element amb el punter |
 | `dblclick` | Doble clic |
-| `mousedown` / `mouseup` | Pulsació i alliberament del botó del ratolí |
-| `mousemove` | Moviment del ratolí sobre l’element |
-| `mouseenter` / `mouseleave` | Entrada o sortida del punter sobre un element |
-
-### Exemple
-```js
-const imatge = document.querySelector('img');
-imatge.addEventListener('mouseenter', () => imatge.style.borderColor = 'red');
-imatge.addEventListener('mouseleave', () => imatge.style.borderColor = 'black');
-```
-
-### Teclat
-| Esdeveniment | Descripció |
-|---------------|-------------|
-| `keydown` | Quan una tecla s’abaixa |
-| `keyup` | Quan s’allibera una tecla |
+| `mousedown` / `mouseup` | Premuda / alliberament d'un botó del ratolí |
+| `mousemove` | Moviment del punter |
+| `mouseenter` / `mouseleave` | El punter entra / surt de l'element |
 
 ```js
-document.addEventListener('keydown', (e) => {
-  console.log(`Has premut: ${e.key}`);
+const imatge = document.querySelector("img");
+imatge.addEventListener("mouseenter", () => {
+  imatge.style.borderColor = "red";
 });
 ```
-🧩 **Exemples:**   
-[events.html](./events.html#mouseNkey)   
-[05-esdeveniments.js](./05-esdeveniments.js)  
-✍️ Proposta: Refactoritza l'exemple 05-esdeveniments per a funcionar amb `addEventListener`
 
-📘 [MDN — MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)  
-📘 [MDN — KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+Els **Pointer Events** (`pointerdown`, `pointermove`, `pointerup`, etc.) ofereixen una interfície comuna per a ratolí, llapis i pantalles tàctils.
+
+### Teclat
+
+| Esdeveniment | Quan s'activa |
+|---|---|
+| `keydown` | En prémer una tecla |
+| `keyup` | En alliberar una tecla |
+
+```js
+document.addEventListener("keydown", (event) => {
+  console.log(`Tecla: ${event.key}`);
+});
+```
+
+Els esdeveniments de teclat depenen del focus. Es poden escoltar a `document` per detectar tecles a la pàgina o en un element que pugui rebre el focus.
+
+### Formularis
+
+- `input` s'activa mentre canvia el valor d'un camp editable.
+- `change` s'activa quan el valor d'un control es confirma segons el seu tipus.
+- `submit` s'activa quan s'envia un formulari; sovint es crida `event.preventDefault()` per gestionar-lo amb JavaScript.
+- `focus` i `blur` indiquen l'entrada i la sortida del focus d'un control.
+
+🧩 Exemples: [events.html#mouseNkey](./events.html#mouseNkey), [05-esdeveniments.js](./05-esdeveniments.js)
+
+✍️ Proposta: refactoritza els handlers de propietat de `05-esdeveniments.js` perquè facin servir `addEventListener()`.
+
+📚 **Referències:**
+- [MDN – `MouseEvent`](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+- [MDN – `KeyboardEvent`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+- [MDN – Introduction to events](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events)
 
 ---
 
-## Delegació d’esdeveniments
-La **delegació** consisteix a afegir un sol ***listener*** a un element pare i detectar quin fill ha originat l’esdeveniment.  
-Assignem el listener al pare (ul) i fem servir e.target.closest('li') per saber quin fill realment ha rebut el clic.
-Així només tenim un listener, i funciona encara que afegim `<li>` nous dinàmicament.
+## 6. Delegació d'esdeveniments
 
-### Exemple
+La **delegació** consisteix a registrar un listener en un element pare i utilitzar `event.target` per identificar quin descendent ha originat l'esdeveniment. És útil quan hi ha molts fills o quan se n'afegeixen de nous dinàmicament.
+
 ```html
 <ul id="llista">
   <li>Element 1</li>
   <li>Element 2</li>
-  <li>Element 3</li>
 </ul>
 ```
-```js
-const llista = document.getElementById('llista');
 
-llista.addEventListener('click', (e) => {
-  const li = e.target.closest('li');
-  if (!li) return; // clic fora de <li>
-  li.classList.toggle('destacat');
+```js
+const llista = document.getElementById("llista");
+
+llista.addEventListener("click", (event) => {
+  const item = event.target.closest("li");
+  if (!item || !llista.contains(item)) return;
+
+  item.classList.toggle("destacat");
 });
 ```
 
-Avantatges:
-- Menys ***listeners*** (eficiència).
-- Funciona també amb elements afegits dinàmicament.   
-     
-🧩 **Exemple:**   
-[events.html](./events.html#delegation)   
-✍️ Proposta: Canvia l'exemple de tal manera que de desapareixin el elements en fer dobleclick o prèmer una tecla concreta.  
-📘 [MDN — Event delegation pattern](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#esdeveniment_delegation)
+`event.target` identifica l'element que ha rebut el clic; `event.currentTarget` és la llista on està registrat el listener.
+
+🧩 Exemple: [events.html#delegation](./events.html#delegation)
+
+✍️ Proposta: adapta l'exemple perquè un doble clic elimini l'element seleccionat.
+
+📚 [MDN – Event delegation pattern](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_delegation)
 
 ---
 
-## CustomEvent i comunicació entre components
-Els `CustomEvent` permeten **crear i emetre esdeveniments personalitzats** per comunicar canvis d’estat entre parts del codi.
+## 7. Esdeveniments personalitzats
 
-### Creació i emissió
+`CustomEvent` permet crear un esdeveniment propi i adjuntar-hi dades mitjançant `detail`. L'opció `bubbles: true` fa que l'esdeveniment pugui propagar-se cap als ancestres de l'element on s'emet.
+
 ```js
-const canviEvent = new CustomEvent('canvi-color', {
-  detail: { color: 'blue' },
-  bubbles: true // permet que pugi pel DOM
+const canviColor = new CustomEvent("color-change", {
+  detail: { color: "blue" },
+  bubbles: true
 });
 
-document.querySelector('#caixa').dispatchEvent(canviEvent);
-```
+paleta.dispatchEvent(canviColor);
 
-### Escolta d’un CustomEvent
-```js
-document.addEventListener('canvi-color', (e) => {
-  console.log('Color rebut:', e.detail.color);
+window.addEventListener("color-change", (event) => {
+  console.log(event.detail.color);
 });
 ```
 
-🧩 **Exemple:**   
-[CustomEvents.html](./customEvent.html)   
+🧩 Exemple: [custom-event.html](./custom-event.html)
 
-📘 [MDN — CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
-
----
-
-## Exemples
-
-| Fitxer | Descripció |
-|--------|-------------|
-| [05-esdeveniments.js](./05-esdeveniments.js) | Exemples bàsics de clic, doble clic i canvis d’estil |
-| [06-drag.js](./06-drag.js) | Exemple complet amb esdeveniments `drag` i `drop` |
-|[propagacio.html](./propagacio.html)| Exemple de propagació d'esdeveniments|
-|[events.html](./events.html)| Exemples de diferents esdeveniments de teclat, ratolí i delegació|
-|[customEvent.html](./customEvent.html)| Exemple de Custom Events|
-
+📚 [MDN – `CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
 
 ---
 
-## Recursos oficials
-- 📘 [MDN — addEventListener()](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
-- 📘 [MDN — Event](https://developer.mozilla.org/en-US/docs/Web/API/Event)
-- 📘 [MDN — Event bubbling and capture](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#esdeveniment_bubbling_and_capture)
-- 📘 [MDN — CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
-- 📘 [MDN — MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
-- 📘 [MDN — KeyboardEvent](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
-- 📘 [MDN — Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+## 8. Arrossegar i deixar anar
+
+La Drag and Drop API permet implementar interaccions d'arrossegar elements. En l'exemple, el destí ha de cancel·lar l'esdeveniment `dragover` amb `preventDefault()` perquè pugui acceptar un `drop`.
+
+🧩 Exemples: [06-drag.js](./06-drag.js), [dragndrop.html](./dragndrop.html)
+
+📚 [MDN – HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
 
 ---
-## [Annex: Tipus d'esdeveniments](AnnexTipusEveniments.md)
 
+## Exemples del bloc
 
+| Fitxer | Contingut |
+|---|---|
+| [05-esdeveniments.js](./05-esdeveniments.js) | Handlers de ratolí, focus i formularis |
+| [06-drag.js](./06-drag.js) | Exemple d'arrossegar i deixar anar |
+| [propagacio.html](./propagacio.html) | Fases de propagació |
+| [events.html](./events.html) | Ratolí, teclat i delegació |
+| [custom-event.html](./custom-event.html) | `CustomEvent` i delegació |
+
+## Referència general
+
+- [MDN – `addEventListener()`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)
+- [MDN – `removeEventListener()`](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener)
+- [MDN – `Event`](https://developer.mozilla.org/en-US/docs/Web/API/Event)
+- [MDN – Event bubbling and capture](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_bubbling_and_capture)
+- [MDN – Event delegation pattern](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_delegation)
+- [MDN – `CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)
+- [MDN – `MouseEvent`](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)
+- [MDN – `KeyboardEvent`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+- [MDN – HTML Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
+
+## Annex: tipus d'esdeveniments
+
+Consulta l'[annex de tipus d'esdeveniments](./annex-tipus-esdeveniments.md) per a una classificació complementària.

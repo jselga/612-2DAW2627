@@ -1,40 +1,36 @@
-# Bloc 1A —  Manipulació del DOM  
+# Resum sobre manipulació del DOM
+
+Aquest document és una **referència** per seleccionar elements d'un document HTML, llegir-ne o modificar-ne el contingut i crear, inserir o eliminar nodes amb JavaScript.
+
+[📚 **Referència general**](#referència-general)
 
 ## Índex
-- [Bloc 1A —  Manipulació del DOM](#bloc-1a---manipulació-del-dom)
-  - [Índex](#índex)
-  - [Introducció al DOM](#introducció-al-dom)
-  - [Estructura de l’arbre DOM](#estructura-de-larbre-dom)
-  - [Node vs Element al DOM](#node-vs-element-al-dom)
-    - [Tipus de nodes principals](#tipus-de-nodes-principals)
-  - [Accés als elements](#accés-als-elements)
-  - [Tipus d'elements i col·leccions](#tipus-delements-i-colleccions)
-  - [Propietats i contingut](#propietats-i-contingut)
-    - [Diferències entre `innerHTML`, `innerText` i `textContent`](#diferències-entre-innerhtml-innertext-i-textcontent)
-    - [Exemples pràctics](#exemples-pràctics)
-  - [Creació i inserció de nous elements](#creació-i-inserció-de-nous-elements)
-  - [Modificació i eliminació de nodes](#modificació-i-eliminació-de-nodes)
-    - [Eliminar un element](#eliminar-un-element)
-    - [Substituir un node existent](#substituir-un-node-existent)
-  - [Manipulació de classes i estils CSS](#manipulació-de-classes-i-estils-css)
-  - [Bones pràctiques i precaucions](#bones-pràctiques-i-precaucions)
-  - [Exemples del bloc](#exemples-del-bloc)
-  - [Recursos i documentació oficial](#recursos-i-documentació-oficial)
+- [Introducció al DOM](#introducció-al-dom)
+- [Estructura de l'arbre DOM](#estructura-de-larbre-dom)
+- [Nodes i elements](#nodes-i-elements)
+- [Seleccionar elements](#seleccionar-elements)
+- [Col·leccions del DOM](#colleccions-del-dom)
+- [Llegir i modificar contingut](#llegir-i-modificar-contingut)
+- [Crear i inserir elements](#crear-i-inserir-elements)
+- [Modificar i eliminar nodes](#modificar-i-eliminar-nodes)
+- [Classes CSS i estils](#classes-css-i-estils)
+- [Bones pràctiques](#bones-pràctiques)
+- [Exemples del bloc](#exemples-del-bloc)
+- [📚 Referència general](#referència-general)
 
 ---
 
 ## Introducció al DOM
-El **Document Object Model (DOM)** és una interfície que representa un document HTML com una **estructura d’arbre** on cada element és un **node**. Aquesta representació permet **accedir, crear, modificar o eliminar** elements de la pàgina mitjançant JavaScript.
+El **Document Object Model (DOM)** és una interfície que representa un document HTML com una **estructura d'arbre** de nodes. JavaScript pot utilitzar aquesta interfície per seleccionar, crear, modificar i eliminar contingut de la pàgina.
 
-Cada element del document és un node i pot tenir fills, pares o germans. El navegador construeix automàticament aquest arbre quan carrega la pàgina.
+Els elements, els nodes de text i els comentaris són nodes del document. El navegador construeix l'arbre DOM en analitzar l'HTML.
 
 📘 [MDN - Introduction to the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
- 
 
 ---
 
-## Estructura de l’arbre DOM
-![Html tree](https://www.w3schools.com/js/pic_htmltree.gif)   
+## Estructura de l'arbre DOM
+![Html tree](https://www.w3schools.com/js/pic_htmltree.gif)
 Quan una pàgina HTML és carregada, el navegador genera un **arbre de nodes** que reflecteix l’estructura del document.
 
 ```html
@@ -55,15 +51,15 @@ Document
              └── strong
                  └── "món"
 ```
-## Node vs Element al DOM
+## Nodes i elements
 
-Quan treballem amb el DOM, **tot és un node**: etiquetes HTML, text, comentaris, etc.  
+Quan treballem amb el DOM, **tot és un node**: etiquetes HTML, text, comentaris, etc.
 Però **no tots els nodes són elements**.
 
-- Un **`Node`** és qualsevol unitat de l’arbre DOM.  
-- Un **`Element`** és un tipus específic de node que representa **una etiqueta HTML**.  
+- Un **`Node`** és qualsevol unitat de l’arbre DOM.
+- Un **`Element`** és un tipus específic de node que representa **una etiqueta HTML**.
 
-És important distingir-los perquè alguns mètodes només retornen elements (p. ex. querySelector) mentre que d’altres poden incloure nodes de text (childNodes).
+És important distingir-los perquè alguns mètodes retornen elements (per exemple, `querySelector()`), mentre que d'altres poden incloure nodes de text i comentaris (per exemple, `childNodes`).
 ###  Tipus de nodes principals
 
 | Tipus de Node | Valor (`nodeType`) | Exemple al DOM |
@@ -76,37 +72,43 @@ Però **no tots els nodes són elements**.
 
 
 
-📘 [MDN - Node](https://developer.mozilla.org/en-US/docs/Web/API/Node)  
-🎓 [W3S - HTML DOM  Tutorial (no oficial)](https://www.w3schools.com/js/js_htmldom.asp)  
+📘 [MDN - Node](https://developer.mozilla.org/en-US/docs/Web/API/Node)
+🎓 [W3S - HTML DOM Tutorial (no oficial)](https://www.w3schools.com/js/js_htmldom.asp)
 
 ---
 
-## Accés als elements
-Els elements poden ser seleccionats mitjançant diferents mètodes de la interfície `Document`.
+## Seleccionar elements
 
-| Mètode | Descripció | Exemple |
-|---------|-------------|----------|
-| `getElementById(id)` | Retorna un element únic (HTMLElement) amb l’ID donat | `document.getElementById("menu")` |
-| `getElementsByClassName(class)` | Retorna una col·lecció (HTMLCollection) HTML d’elements | `document.getElementsByClassName("item")` |
-| `getElementsByTagName(tag)` | Retorna tots els elements (HTMLCollection) amb l’etiqueta indicada | `document.getElementsByTagName("li")` |
-| `querySelector(selector)` | Retorna el primer element (HTMLElement) que compleix el selector per tag, classe, id o atribut |`document.querySelector("p")` `document.querySelector(".item")` `document.querySelector("#element")` `document.querySelector('[name="email"]')`|
-| `querySelectorAll(selector)` | Retorna tots els elements (NodeList) que compleixen el selector per tag, classe, id o atribut | `document.querySelectorAll("p")` `document.querySelectorAll(".item"` `document.querySelectorAll("#element")`  `document.querySelectorAll('[name="email"]')` |
+Els mètodes de `Document` permeten seleccionar elements. `getElementById()` continua sent útil quan es coneix l'identificador; `querySelector()` i `querySelectorAll()` accepten selectors CSS.
+
+| Mètode | Retorna | Exemple |
+|---|---|---|
+| `getElementById(id)` | L'element amb aquest ID o `null` | `document.getElementById("menu")` |
+| `getElementsByClassName(class)` | Una `HTMLCollection` viva | `document.getElementsByClassName("item")` |
+| `getElementsByTagName(tag)` | Una `HTMLCollection` viva | `document.getElementsByTagName("li")` |
+| `querySelector(selector)` | El primer `Element` coincident o `null` | `document.querySelector(".item")` |
+| `querySelectorAll(selector)` | Una `NodeList` estàtica amb els elements coincidents | `document.querySelectorAll("li.item")` |
 
 🧩 **Exemple:** [01-selectors.js](./01-selectors.js)
 
 📘 [MDN - Document.querySelector()](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
 
 ---
-## Tipus d'elements i col·leccions
-| Tipus                | Retornat per                                         | Iteració                                                              | Actualització dinàmica                                         | Accés per índex | Descripció                               |
-| :------------------- | :--------------------------------------------------- | :-------------------------------------------------------------------- | :------------------------------------------------------------- | :-------------- | :--------------------------------------- |
-| **`HTMLElement`**    | `getElementById()`, `querySelector()`                | ❌ No iterable (retorna un únic element)                               | —                                                              | —               | Representa un **únic element HTML**.     |
-| **`HTMLCollection`** | `getElementsByTagName()`, `getElementsByClassName()` | ⚠️ Parcial (no admet `forEach`, però sí `for...of` o bucles clàssics) | ✅ Sí, es **refresca automàticament** si el DOM canvia          | ✅ Sí            | Conjunt **viu** d’elements HTML.         |
-| **`NodeList`**       | `querySelectorAll()`, `childNodes`                   | ✅ Sí, compatible amb `forEach()` i `for...of`                         | ⚠️ Normalment **estàtica**, no s’actualitza quan el DOM canvia | ✅ Sí            | Conjunt **estàtic** de nodes o elements. |
+## Col·leccions del DOM
+
+| Tipus | Exemple de retorn | Contingut | Comportament |
+|---|---|---|---|
+| `Element` | `getElementById()`, `querySelector()` | Un element o `null` | No és una col·lecció |
+| `HTMLCollection` | `getElementsByClassName()`, `getElementsByTagName()` | Elements | Viva: s'actualitza quan canvia el DOM |
+| `NodeList` estàtica | `querySelectorAll()` | Els elements coincidents | No s'actualitza quan canvia el DOM |
+| `NodeList` viva | `childNodes` | Nodes, inclosos text i comentaris | S'actualitza quan canvia el DOM |
+
+Les col·leccions es poden recórrer per índex. Les `NodeList` modernes també admeten `forEach()`; per a compatibilitat o per utilitzar mètodes d'array, es poden convertir amb `Array.from()`.
 
 🧩 **Exemple:** [02-list-collections.js](./02-list-collections.js)
-## Propietats i contingut
-Els nodes del DOM tenen propietats que permeten llegir i modificar el seu contingut.
+## Llegir i modificar contingut
+
+Els elements del DOM exposen propietats per llegir i modificar contingut i atributs.
 
 ```js
 const title = document.querySelector('h1');
@@ -128,11 +130,13 @@ link.setAttribute('target', '_blank');
 
 ### Diferències entre `innerHTML`, `innerText` i `textContent`
 
-| Propietat | Què retorna | Inclou HTML? | Mostra text ocult (`display:none`)? | Manté salts i espais | Pot modificar HTML intern | Rendiment | Ús recomanat |
-|:--|:--|:--|:--|:--|:--|:--|:--|
-| **`innerHTML`** | El contingut HTML de l’element (etiquetes + text) | ✅ Sí | ✅ Sí | ❌ No, interpreta el codi HTML | ✅ Sí (pot afegir o eliminar elements) | 🐢 Més lent, reinterpreta el DOM | Quan vols **llegir o injectar HTML** complet dins un element. ⚠️ Per seguretat: **evitar injectar dades provinents de l’usuari** |
-| **`innerText`** | Només el **text visible renderitzat** | ❌ No | ❌ No, ignora text ocult | ⚙️ Normalitza segons el renderitzat | ❌ Només text, sense etiquetes | 🐢 Més lent (calcula estils i layout) | Quan vols **mostrar o copiar el text com es veu a pantalla** |
-| **`textContent`** | Tot el **text del DOM brut** | ❌ No | ✅ Sí, inclou text ocult | ✅ Manté exactament els nodes de text | ❌ Només text, sense etiquetes | ⚡ Més ràpid (no re-renderitza) | Quan vols **llegir o modificar text pur**, independentment de l’estil |
+| Propietat | Què llegeix | Què passa quan s'hi assigna text | Ús habitual |
+|---|---|---|---|
+| `innerHTML` | El marcatge HTML intern, incloent-hi etiquetes | Analitza el text com a HTML i reemplaça els fills | Quan cal llegir o crear marcatge HTML controlat |
+| `innerText` | El text representat visualment | Reemplaça el contingut per text i reflecteix el comportament de renderització | Quan interessa el text tal com es mostra |
+| `textContent` | El text dels nodes descendents, inclòs el text ocult | Reemplaça els fills per un node de text | Quan cal llegir o assignar text sense interpretar HTML |
+
+Evita posar a `innerHTML` dades no fiables (per exemple, text escrit per l'usuari): el navegador les interpreta com a marcatge i poden introduir contingut perillós. Per a text pla, prefereix `textContent`.
 
 ---
 
@@ -163,19 +167,20 @@ link.setAttribute('target', '_blank');
 
 🧩 **Exemple:** [03-elements.js](./03-elements.js)
 
-📘 [MDN - Element: innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)  
+📘 [MDN - Element: innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
 
-📘 [MDN - HTMLElement: innerText](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)  
+📘 [MDN - HTMLElement: innerText](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)
 
-📘 [MDN - Node: textContent](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/textContent)  
+📘 [MDN - Node: textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
 
 📘 [MDN - Element.setAttribute()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute)
 
 ---
 
 
-## Creació i inserció de nous elements
-Per generar nous elements al document, s’utilitzen els mètodes `createElement` i `appendChild`.
+## Crear i inserir elements
+
+`document.createElement()` crea un element desconnectat del document. Després es pot configurar i inserir amb `append()`, `prepend()` o `appendChild()`.
 
 ```js
 const novaSeccio = document.createElement('section');
@@ -183,7 +188,7 @@ novaSeccio.textContent = 'Això s’ha creat amb JavaScript';
 document.body.appendChild(novaSeccio);
 ```
 
-Per afegir elements dins d’un altre node:
+Per afegir elements dins d'un altre node:
 
 ```js
 const llista = document.querySelector('ul');
@@ -194,13 +199,14 @@ llista.appendChild(nouElement);
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)  
+📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)
 📘 [MDN - Document: createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
 
 ---
 
-## Modificació i eliminació de nodes
-Els nodes del DOM es poden substituir o eliminar.
+## Modificar i eliminar nodes
+
+Els nodes del DOM es poden eliminar o substituir.
 
 ### Eliminar un element
 ```js
@@ -213,18 +219,19 @@ primer.remove();
 const nouParagraf = document.createElement('p');
 nouParagraf.textContent = 'Text substituït';
 const vell = document.querySelector('#textAntic');
-vell.parentNode.replaceChild(nouParagraf, vell);
+vell.replaceWith(nouParagraf);
 ```
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)  
+📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)
 📘 [MDN - Node.replaceChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild)
 
 ---
 
-## Manipulació de classes i estils CSS
-Les classes CSS poden gestionar-se amb `classList`.
+## Classes CSS i estils
+
+Les classes CSS es poden gestionar amb `classList`.
 
 ```js
 const bloc = document.querySelector('#bloc');
@@ -242,34 +249,31 @@ bloc.style.fontWeight = 'bold';
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)  
+📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
 📘 [MDN - HTMLElement.style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
 
 ---
 
-## Bones pràctiques i precaucions
-- Assegura’t que el DOM estigui carregat abans de manipular-lo amb:
-  - `DOMContentLoaded`: Modern i més ràpid
+## Bones pràctiques
+
+- Assegura't que els elements existeixin abans de seleccionar-los i modificar-los.
+- Si el codi s'executa abans que s'hagi analitzat el document, pots esperar `DOMContentLoaded`. Amb un script `defer` o situat al final del `<body>`, normalment no cal afegir un listener per aquest esdeveniment.
   ```js
   document.addEventListener('DOMContentLoaded', () => {
-    // Codi segur aquí quan l’HTML s’ha processat
+    // L'HTML ja s'ha analitzat.
   });
   ```
-  - `window.onload`: Més lent però carrega tot
-  ```js
-  window.onload = () => {
-    // Codi segur aquí quan tota la pàgina s’ha carregat (HTML,imatges,CSS)
-  };
-  ```  
-- Evita `document.write()` després del càrrec inicial.
-- Utilitza `querySelector()` i `querySelectorAll()` en lloc de mètodes antics com `getElementById`, `getElementsByClassName`,etc.
+- `window` emet `load` quan també han acabat de carregar recursos dependents, com imatges i fulls d'estil; no és simplement una versió «més lenta» de `DOMContentLoaded`.
+- Evita `document.write()` després de la càrrega inicial.
+- Tria el selector més clar: `getElementById()` continua sent adequat per cercar per ID; `querySelector()` i `querySelectorAll()` permeten selectors CSS.
 - Prefereix `textContent` abans que `innerHTML` quan no necessitis inserir HTML.
-- Utilitza `classList` per modificar classes en lloc de `className`.
+- Utilitza `classList` per modificar classes en lloc de reemplaçar tot el valor de `className`.
 
 ---
 
 ## Exemples del bloc
-Es poden executar els scripts individuals (`.js`) des de `index.html`. 
+
+Els scripts `.js` manipulen el DOM i s'han de carregar des d'una pàgina HTML amb els elements necessaris. `index.html` carrega `03-elements.js`; per provar un altre script, canvia el `src` o obre la pàgina d'exemple corresponent.
 
 | Fitxer | Descripció |
 |--------|-------------|
@@ -280,14 +284,23 @@ Es poden executar els scripts individuals (`.js`) des de `index.html`.
 
 ---
 
-## Recursos i documentació oficial
+## Referència general
 - 📘 [MDN - Document Object Model (DOM)](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
 - 📘 [WHATWG - DOM Standard](https://dom.spec.whatwg.org/)
 - 📘 [MDN - Document API](https://developer.mozilla.org/en-US/docs/Web/API/Document)
 - 📘 [MDN - Element API](https://developer.mozilla.org/en-US/docs/Web/API/Element)
+- 📘 [MDN - Document.querySelector()](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector)
+- 📘 [MDN - Element: innerHTML](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)
+- 📘 [MDN - HTMLElement: innerText](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText)
+- 📘 [MDN - Node: textContent](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)
+- 📘 [MDN - Element.setAttribute()](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute)
+- 📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)
+- 📘 [MDN - Document: createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
+- 📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)
+- 📘 [MDN - Node.replaceChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild)
+- 📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
+- 📘 [MDN - HTMLElement.style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
 - 🎓 [MDN – Guide: Manipulating documents (Client-side Web APIs)](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents)
 
 
 ---
-
-
