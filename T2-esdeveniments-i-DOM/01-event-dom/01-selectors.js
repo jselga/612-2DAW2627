@@ -26,11 +26,13 @@ console.log(els);
 
 let plive = document.getElementsByTagName('p');
 let pstatic = document.querySelectorAll('p');
+console.log("Estat dels paragrafs abans d'afegir");
+
 console.log(plive,pstatic);
 
 let nouP = document.createElement('p');
 document.body.append(nouP);
-
+console.log("Estat dels paragrafs després d'afegir");
 console.log(plive,pstatic);
 // Aquí es veu com un HTMLCollection s'actulatiza mentre que un NodeList no, 
 // hauríem de fer un altre querySelectorAll després d'afegir l'element.

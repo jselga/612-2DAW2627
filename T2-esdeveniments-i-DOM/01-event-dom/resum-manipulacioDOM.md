@@ -5,18 +5,24 @@ Aquest document és una **referència** per seleccionar elements d'un document H
 [📚 **Referència general**](#referència-general)
 
 ## Índex
+- [Índex](#índex)
 - [Introducció al DOM](#introducció-al-dom)
 - [Estructura de l'arbre DOM](#estructura-de-larbre-dom)
 - [Nodes i elements](#nodes-i-elements)
+  - [Tipus de nodes principals](#tipus-de-nodes-principals)
 - [Seleccionar elements](#seleccionar-elements)
 - [Col·leccions del DOM](#colleccions-del-dom)
 - [Llegir i modificar contingut](#llegir-i-modificar-contingut)
+  - [Diferències entre `innerHTML`, `innerText` i `textContent`](#diferències-entre-innerhtml-innertext-i-textcontent)
+  - [Exemples pràctics](#exemples-pràctics)
 - [Crear i inserir elements](#crear-i-inserir-elements)
 - [Modificar i eliminar nodes](#modificar-i-eliminar-nodes)
+  - [Eliminar un element](#eliminar-un-element)
+  - [Substituir un node existent](#substituir-un-node-existent)
 - [Classes CSS i estils](#classes-css-i-estils)
 - [Bones pràctiques](#bones-pràctiques)
 - [Exemples del bloc](#exemples-del-bloc)
-- [📚 Referència general](#referència-general)
+- [Referència general](#referència-general)
 
 ---
 
@@ -30,7 +36,7 @@ Els elements, els nodes de text i els comentaris són nodes del document. El nav
 ---
 
 ## Estructura de l'arbre DOM
-![Html tree](https://www.w3schools.com/js/pic_htmltree.gif)
+![Html tree](https://www.w3schools.com/js/pic_htmltree.gif)  
 Quan una pàgina HTML és carregada, el navegador genera un **arbre de nodes** que reflecteix l’estructura del document.
 
 ```html
@@ -72,7 +78,7 @@ Però **no tots els nodes són elements**.
 
 
 
-📘 [MDN - Node](https://developer.mozilla.org/en-US/docs/Web/API/Node)
+📘 [MDN - Node](https://developer.mozilla.org/en-US/docs/Web/API/Node)  
 🎓 [W3S - HTML DOM Tutorial (no oficial)](https://www.w3schools.com/js/js_htmldom.asp)
 
 ---

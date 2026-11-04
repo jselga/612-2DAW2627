@@ -33,12 +33,12 @@ console.log(collection, list);
 // // Són ArrayIterator i executant el mètode next podem anar veient els elements
 // Entrades completes
 let entries = list.entries();
-console.log(entries);
+console.log(entries.next());
 // Les claus
 let keys = list.keys();
-console.log(keys);
+console.log(keys.next());
 // Els valors
 let values = list.values();
-console.log(values);
+console.log(values.next());
 // llistem tots els elements
 // [...list].forEach(el=>console.log(el));
