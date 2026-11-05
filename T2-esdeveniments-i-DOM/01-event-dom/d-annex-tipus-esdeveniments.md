@@ -1,6 +1,6 @@
 # Annex: tipus d'esdeveniments
 
-Aquest annex complementa el [resum d'esdeveniments](./resum-esdeveniments.md) i agrupa esdeveniments habituals segons la interacció o els elements amb què s'utilitzen.
+Aquest annex complementa el [resum d'esdeveniments](./c-resum-esdeveniments.md) i agrupa esdeveniments habituals segons la interacció o els elements amb què s'utilitzen.
 
 ## Índex
 

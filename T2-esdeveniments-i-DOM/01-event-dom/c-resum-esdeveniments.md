@@ -275,4 +275,4 @@ La Drag and Drop API permet implementar interaccions d'arrossegar elements. En l
 
 ## Annex: tipus d'esdeveniments
 
-Consulta l'[annex de tipus d'esdeveniments](./annex-tipus-esdeveniments.md) per a una classificació complementària.
+Consulta l'[annex de tipus d'esdeveniments](./d-annex-tipus-esdeveniments.md) per a una classificació complementària.

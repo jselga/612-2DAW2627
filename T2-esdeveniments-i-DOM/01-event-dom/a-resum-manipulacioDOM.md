@@ -87,6 +87,14 @@ Però **no tots els nodes són elements**.
 
 Els mètodes de `Document` permeten seleccionar elements. `getElementById()` continua sent útil quan es coneix l'identificador; `querySelector()` i `querySelectorAll()` accepten selectors CSS.
 
+Amb `querySelector()` podem indicar quin element volem seleccionar mitjançant un selector CSS:
+
+```js
+document.querySelector('#cos'); // # per seleccionar un id
+document.querySelector('.red'); // . per seleccionar una classe
+document.querySelector('p');    // sense prefix per seleccionar una etiqueta
+```
+
 | Mètode | Retorna | Exemple |
 |---|---|---|
 | `getElementById(id)` | L'element amb aquest ID o `null` | `document.getElementById("menu")` |
@@ -220,6 +228,15 @@ const primer = document.querySelector('li');
 primer.remove();
 ```
 
+També es pot eliminar un fill des del seu pare amb `removeChild()`. `firstChild` permet accedir al primer node fill, que pot ser un element, un node de text o un comentari:
+
+```js
+const pare = document.querySelector('#info');
+if (pare.firstChild) {
+  pare.removeChild(pare.firstChild);
+}
+```
+
 ### Substituir un node existent
 ```js
 const nouParagraf = document.createElement('p');
@@ -231,6 +248,9 @@ vell.replaceWith(nouParagraf);
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
 📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)  
+📘 [MDN - Node.firstChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild)
+
+📘 [MDN - Node.removeChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
 📘 [MDN - Node.replaceChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild)
 
 ---
@@ -303,6 +323,8 @@ Els scripts `.js` manipulen el DOM i s'han de carregar des d'una pàgina HTML am
 - 📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)
 - 📘 [MDN - Document: createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
 - 📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)
+- 📘 [MDN - Node.firstChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild)
+- 📘 [MDN - Node.removeChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild)
 - 📘 [MDN - Node.replaceChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild)
 - 📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
 - 📘 [MDN - HTMLElement.style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)

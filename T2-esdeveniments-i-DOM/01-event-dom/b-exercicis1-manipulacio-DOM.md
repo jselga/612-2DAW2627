@@ -1,6 +1,6 @@
 # Bloc 1 — Exercicis de manipulació del DOM (bàsic)
 
-Aquest document recull exercicis pràctics per treballar la manipulació del DOM amb JavaScript. Consulta el [resum de manipulació del DOM](./resum-manipulacioDOM.md) com a referència per als mètodes i les propietats que s'hi fan servir.
+Aquest document recull exercicis pràctics per treballar la manipulació del DOM amb JavaScript. Consulta el [resum de manipulació del DOM](./a-resum-manipulacioDOM.md) com a referència per als mètodes i les propietats que s'hi fan servir.
 
 > **Aquesta llista d'exercicis s'ampliarà posteriorment.**
 
