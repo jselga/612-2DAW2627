@@ -27,6 +27,17 @@ Inclou:
 - Classes ES6
 - Exercicis de programació orientada a objectes
 
+### Tema 2
+
+- [Esdeveniments i model d'objectes del document](./T2-esdeveniments-i-DOM)
+
+Inclou:
+
+- Manipulació del DOM
+- Esdeveniments
+- Formularis
+- Validacions
+
 ## Organització
 
 Cada tema contindrà exemples de codi, fitxers HTML, resums teòrics i exercicis pràctics.
