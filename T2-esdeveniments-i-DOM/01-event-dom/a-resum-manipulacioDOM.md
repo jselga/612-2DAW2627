@@ -205,7 +205,7 @@ llista.appendChild(nouElement);
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)
+📘 [MDN - Node: appendChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild)  
 📘 [MDN - Document: createElement()](https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement)
 
 ---
@@ -230,7 +230,7 @@ vell.replaceWith(nouParagraf);
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)
+📘 [MDN - Node.remove()](https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove)  
 📘 [MDN - Node.replaceChild()](https://developer.mozilla.org/en-US/docs/Web/API/Node/replaceChild)
 
 ---
@@ -255,7 +255,7 @@ bloc.style.fontWeight = 'bold';
 
 🧩 **Exemple:** [04-dom.js](./04-dom.js)
 
-📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
+📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)  
 📘 [MDN - HTMLElement.style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
 
 ---
@@ -307,6 +307,6 @@ Els scripts `.js` manipulen el DOM i s'han de carregar des d'una pàgina HTML am
 - 📘 [MDN - Element.classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)
 - 📘 [MDN - HTMLElement.style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style)
 - 🎓 [MDN – Guide: Manipulating documents (Client-side Web APIs)](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents)
-
+- 🎥 [Carlos Azaustre - Cómo dominar el DOM en JavaScript en 30 minutos 🌳 2025](https://www.youtube.com/watch?v=z1a0eHWn5ds)
 
 ---
