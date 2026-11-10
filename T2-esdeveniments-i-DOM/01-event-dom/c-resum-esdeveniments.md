@@ -6,15 +6,21 @@ Aquest document és una **referència** sobre com escoltar i gestionar esdevenim
 
 ## Índex
 
+- [Índex](#índex)
 - [1. Esdeveniments, listeners i handlers](#1-esdeveniments-listeners-i-handlers)
 - [2. Registrar i eliminar listeners](#2-registrar-i-eliminar-listeners)
 - [3. L'objecte `Event`](#3-lobjecte-event)
 - [4. Propagació dels esdeveniments](#4-propagació-dels-esdeveniments)
 - [5. Ratolí, teclat i formularis](#5-ratolí-teclat-i-formularis)
+  - [Ratolí i punter](#ratolí-i-punter)
+  - [Teclat](#teclat)
+  - [Formularis](#formularis)
 - [6. Delegació d'esdeveniments](#6-delegació-desdeveniments)
 - [7. Esdeveniments personalitzats](#7-esdeveniments-personalitzats)
 - [8. Arrossegar i deixar anar](#8-arrossegar-i-deixar-anar)
-- [📚 Referència general](#referència-general)
+- [Exemples del bloc](#exemples-del-bloc)
+- [Referència general](#referència-general)
+- [Annex: tipus d'esdeveniments](#annex-tipus-desdeveniments)
 
 ---
 
@@ -260,6 +266,7 @@ La Drag and Drop API permet implementar interaccions d'arrossegar elements. En l
 | [propagacio.html](./propagacio.html) | Fases de propagació |
 | [events.html](./events.html) | Ratolí, teclat i delegació |
 | [custom-event.html](./custom-event.html) | `CustomEvent` i delegació |
+| [Enunciat exercicis 2 esdeveniments](./exercicis2-esdeveniments-dom/e-exercicis2-esdeveniments-dom.md) | Exercicis  d'esdeveniments del DOM |
 
 ## Referència general
 

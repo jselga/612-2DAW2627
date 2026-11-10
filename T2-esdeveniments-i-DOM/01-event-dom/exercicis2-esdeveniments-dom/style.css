@@ -1,0 +1,46 @@
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        margin: 1.5rem;
+      }
+
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+
+      p#pId {
+        clear: both;
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      /* Cada “carta” amb imatge */
+      body > div {
+        float: left;
+        width: 200px;
+        border: solid 2px #000;
+        margin: 1rem;
+        padding: 0 1rem 1rem 1rem;
+      }
+
+      body > div h2 {
+        margin-top: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      body > div img {
+        display: block;
+        border: solid 2px #000;
+      }
+
+      /* Per assegurar que el peu no quedi sota els floats, si cal afegir més contingut */
+      .clearfix::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
