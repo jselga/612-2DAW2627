@@ -1,7 +1,6 @@
 import CardBody from "./CardBody";
 
-function Card(props) {
-    const {body}=props;
+function Card() {
   return (
     <div
       className="card"
@@ -10,7 +9,7 @@ function Card(props) {
       }}
     >
       <div className="card-body">
-        {body}
+        <CardBody title="Card de prova" subtitle="algo..." text="Lorem ipsum" />
       </div>
     </div>
   );
