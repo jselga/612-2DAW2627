@@ -278,6 +278,11 @@ form button {
   justify-self: start;
 }
 
+.field-error {
+  color: #a32432;
+  font-size: 0.9rem;
+}
+
 #errors:empty {
   display: none;
 }

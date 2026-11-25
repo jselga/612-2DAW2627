@@ -102,6 +102,8 @@ const dades = Object.fromEntries(new FormData(form));
 
 🧩 Exemple: [formularis.js](./formularis.js)
 
+La variant [formularis-textcontent.js](./formularis-textcontent.js) manté l'estructura `validate()` / `render()` / `submit`, però crea els nodes amb `createElement()` i insereix els valors com a text amb `textContent` i `.value`.
+
 📚 [MDN – `FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 
 ---
@@ -171,6 +173,12 @@ function renderResultat(dades) {
 ```
 
 L'exemple `formularis.js` mostra una altra tècnica: generar una plantilla i assignar-la a `innerHTML`. No hi interpolis dades no fiables sense escapament o sanitització, perquè el navegador les interpretarà com a marcatge HTML.
+
+Per provar la variant sense reemplaçar l'original, canvia temporalment a `form.html`:
+
+```html
+<script src="formularis-textcontent.js"></script>
+```
 
 ---
 
