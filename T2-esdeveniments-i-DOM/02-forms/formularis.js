@@ -1,10 +1,10 @@
 let validate = data => {
     let errors = {};
     if (!data.name) {
-        errors.name = 'Camp obligatori';
+        errors.name = 'Camp Nom obligatori';
     }
     if (!data.lastname) {
-        errors.lastname = 'Camp obligatori';
+        errors.lastname = 'Camp Cognom obligatori';
     }
     return errors;
 }
@@ -42,9 +42,9 @@ form.addEventListener('submit', e => {
     }, {})
     //    console.log(data);
     const errors = validate(data);
-    console.log(errors);
+    // console.log(errors);
     if (Object.keys(errors).length > 0) {
-        let html = render({ errors, data });
+        let html = render({ data, errors });
         form.innerHTML = html;
         return;
     }
