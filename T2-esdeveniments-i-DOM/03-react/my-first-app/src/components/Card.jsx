@@ -1,13 +1,16 @@
 import CardBody from "./CardBody";
 
-function Card() {
-  const width = {
-    width: "300px",
-  };
+function Card(props) {
+    const {body}=props;
   return (
-    <div className="card" style={width}>
+    <div
+      className="card"
+      style={{
+        width: "300px",
+      }}
+    >
       <div className="card-body">
-        <CardBody/>
+        {body}
       </div>
     </div>
   );
