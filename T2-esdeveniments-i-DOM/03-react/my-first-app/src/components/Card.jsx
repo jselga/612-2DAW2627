@@ -1,4 +1,4 @@
-import CardBody from "./CardBody";
+
 
 function Card(props) {
   const {children} = props
