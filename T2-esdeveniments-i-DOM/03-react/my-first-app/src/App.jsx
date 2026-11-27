@@ -6,12 +6,13 @@ import List from "./components/List";
  * @returns {JSX.Element}
  */
 function App() {
-  const list = ['Chopper','Rocket','Cosmo']
+  const list = ["Chopper", "Rocket", "Cosmo"];
   return (
     <>
       <Card>
         <CardBody title="Llista Personatges" subtitle="..." text="Tria'n un" />
-        <List data={list}/>
+        <List data={list} />
+       
       </Card>
     </>
   );
