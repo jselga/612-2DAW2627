@@ -23,6 +23,22 @@ npm run dev
 
 Durant la creació, si Vite pregunta quin *linter* volem fer servir, seleccionem **ESLint**. Si pregunta si volem afegir **Vite DevTools**, seleccionem que **no**: per a aquesta pràctica farem servir ESLint i no necessitem Vite DevTools.
 
+### Instal·lar Bootstrap
+
+Un cop creat el projecte, des de la carpeta `my-first-app/`, instal·lem la darrera versió estable de Bootstrap amb npm:
+
+```bash
+npm i bootstrap@latest
+```
+
+Després importem el CSS de Bootstrap a `src/main.jsx`, abans de renderitzar l’aplicació. Així les classes de Bootstrap queden disponibles als components:
+
+```jsx
+import 'bootstrap/dist/css/bootstrap.min.css'
+```
+
+La línia es pot veure al [punt d’entrada del projecte](my-first-app/src/main.jsx). Per als components que necessitin interactivitat pròpia de Bootstrap, caldrà importar també el JavaScript corresponent; en aquesta pràctica fem servir les classes CSS.
+
 Si el projecte ja està clonat, no cal tornar-lo a crear. Des de la carpeta `my-first-app/`, executa:
 
 ```bash
@@ -127,3 +143,4 @@ Quan es prem el botó, ha de canviar a l’estat que es veu a la segona captura:
 - [Documentació oficial de React](https://react.dev/learn)
 - [Referència de `useState`](https://react.dev/reference/react/useState)
 - [Documentació de Vite](https://vite.dev/guide/)
+- [Documentació oficial d’instal·lació de Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/download/)
