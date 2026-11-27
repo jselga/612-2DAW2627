@@ -1,97 +1,129 @@
-## 1. Què és React i per què l’utilitzem?
-React és una biblioteca JavaScript per construir interfícies d’usuari basades en **components**.
+# Guia breu de React
 
-Avantatges principals:
-- Permet dividir la UI en peces reutilitzables.
-- Facilita la gestió d’estat i la reactivitat.
-- Ajuda a organitzar projectes més complexos.
-- És molt utilitzat en el sector professional.
+## 1. Objectiu
 
-Aquest bloc introdueix React per preparar l’alumnat pel projecte final del mòdul.
+En aquesta pràctica introduïm React pas a pas, construint una aplicació petita i seguint-ne l’evolució amb Git. El repositori de l’exemple és [`my-first-app/`](my-first-app/).
 
----
+La guia està en desenvolupament i s’anirà ampliant a mesura que avancem a classe. De moment, l’exemple arriba fins al pas de múltiples propietats (*props*). Els passos següents previstos són `children`, una llista, esdeveniments i estat. El botó amb canvi d’estat serà un exercici per fer a classe, no una part de l’exemple guiat.
 
-## 2. Crear un projecte React amb Vite
-Vite permet crear projectes React de dues maneres: **amb plantilla directa** o **amb menú interactiu**.
+## 2. Què és React?
 
-### 🔹 Opció A — Crear projecte amb menú interactiu (també vàlid)
-Si no especifiques plantilla, Vite et mostrarà un menú perquè triïs framework i variant:
-```bash
-npm create vite@latest
-```
-El menú et demanarà:
-1. **Nom del projecte** (si no el passes com a argument)
-2. **Framework** → tria: `React`
-3. **Variant** → tria:
-   - **`JavaScript` (React JS)** (Opció recomanada)
-   - `JavaScript-SWC` (React JS amb SWC, més ràpid)
-   - `TypeScript` (React TypeScript)
-   - Altres (les veurem més endavant)
-4. **Rolldown**: (No, per defecte)
-5. **Instal·lació i arrancada automàtica**: Instal·la dependències i arrenca el servidor de desenvolupament  
+React és una biblioteca JavaScript per construir interfícies d’usuari amb components. Els components permeten dividir la interfície en peces petites i reutilitzables. Més endavant farem servir props per passar informació entre components, i estat per representar dades que poden canviar mentre s’utilitza l’aplicació.
 
-### 🔹 Opció B — Crear projecte amb plantilla (recomanat per evitar errors)
-```bash
-npm create vite@latest my-app -- --template react
-```
-Aquesta opció demanarà les opcions 4 i 5 de l'opció A de forma interactiva de totes maneres. 
+## 3. Crear i executar el projecte
 
-
-> 💡 Tant l’opció A com l’opció B activen el suport per JSX automàticament. No cal configurar Babel manualment.
-
-### Crear projecte 
+Per crear un projecte nou amb Vite, executa:
 
 ```bash
-npm create vite@latest 
-```
-Segueix el menu interactiu i si has dit que no volies l'opció 5, hauràs de fer:
-```
-cd <nom-del-projecte>
+npm create vite@latest my-first-app -- --template react
+cd my-first-app
 npm install
 npm run dev
 ```
 
-Vite és una eina de desenvolupament ràpida, senzilla i ideal per introduir React.
+Durant la creació, si Vite pregunta quin *linter* volem fer servir, seleccionem **ESLint**. Si pregunta si volem afegir **Vite DevTools**, seleccionem que **no**: per a aquesta pràctica farem servir ESLint i no necessitem Vite DevTools.
 
-### Fitxers rellevants
-- `package.json` — dependències i scripts
-- `vite.config.js` — configuració del projecte
-- `index.html` — punt inicial on React injecta l’aplicació
-- `src/` — codi principal
+Si el projecte ja està clonat, no cal tornar-lo a crear. Des de la carpeta `my-first-app/`, executa:
 
----
-### Exemples de classe
-[Exemple aplicació amb React](my-first-app/): A classe hem anat desenvolupant un projecte bàsic de React on a través dels diferents *commits* hem vist des de la creació de components, passar propietats entre components, gestió d'esdeveniments i estat i renderitzat condicional.  
-
-#### Components rellevants: 
-- Card
-- List
-- CardBody  
-#### Propietats (props):
-- paràmetres: title, text,...
-- children: quan un component pot tenir components fills
-- funcions: passar funcions com a propietats: *OnSelect*
-
-#### Esdeveniments
-Gestió d'esdeveniments predefinits com **onClick** i maneig amb **handleClick**
-
-#### Gestió d'estat (useState)
-```jsx
-const [variable,setVariable]=useState(valorInicial);
-```
-[React API Reference - useState](https://react.dev/reference/react/useState)
-
-#### Renderitzat condicional
-Mostrar contingut segons variables:
-```jsx
-list.length !== 0 && (
-    <List data={list} onSelect={handleSelect} />
+```bash
+npm install
+npm run dev
 ```
 
-[Exemple Botó amb canvi segons estat](button-example/): Exercici de classe on el botó canvia de contingut i estil segons l'estat  
+Vite mostrarà l’adreça local on es pot obrir l’aplicació. Per aturar el servidor, prem `Ctrl+C` al terminal.
 
-![alt text](ExempleButtonCaptura1.png)![alt text](ExempleButtonCaptura2.png)
+Fitxers principals:
 
-[Exemple Afegir i eliminar elements](add-delete-example//): Exercici de classe on el podem afegir o eliminar contingut a una llista.   
+- `package.json`: dependències i ordres del projecte.
+- `index.html`: document HTML inicial, amb el punt d’entrada de l’aplicació.
+- `src/main.jsx`: crea l’arrel de React i renderitza `App`.
+- `src/App.jsx`: component principal de l’aplicació.
+- `src/components/`: components que hem anat extraient de l’aplicació.
 
-![alt text](ExempleAfegirEliminarCaptura1.png)
+## 4. Recorregut fet a classe
+
+Els commits permeten consultar el projecte tal com era a cada pas. Des de `my-first-app/`, fes servir `git log --oneline` per veure l’historial. Per obrir un pas concret:
+
+```bash
+git switch --detach <hash-del-commit>
+```
+
+Per tornar a la branca principal:
+
+```bash
+git switch main
+```
+
+| Pas | Commit actual | Què s’hi treballa |
+| --- | --- | --- |
+| 1 | `3c2753f` — Projecte React inicial | Crear l’aplicació amb Vite i reconèixer l’estructura inicial. |
+| 2 | `9dd288b` — App net | Treure el contingut de demostració de la plantilla i començar amb una aplicació mínima. |
+| 3 | `573d153` — Eliminació d’estils i instal·lació bootstrap | Simplificar els estils inicials i afegir Bootstrap. |
+| 4 | `0f17369` — Rendiritzat dinàmic | Generar contingut a partir de dades. |
+| 5 | `a8fab68` — Components: Card | Extreure una part de la interfície en un component `Card`. |
+| 6 | `280cbe3` — Card amb fragments | Crear `CardBody` i retornar diversos elements amb un fragment. |
+| 7 | `1aca39e` — Props | Passar dades a un component mitjançant propietats. |
+| 8 | `7d2042a` — Multiples props | Passar diverses propietats, com ara `title`, `subtitle` i `text`. |
+
+Els noms de la taula són els missatges actuals dels commits. També es pot canviar el missatge d’un commit des de VS Code amb l’eina **Git Graph**, tal com hem vist a classe: obre el gràfic, selecciona el commit i fes servir l’opció d’editar-ne el missatge. Si el commit ja s’ha compartit al repositori remot, el canvi reescriu l’historial i caldrà actualitzar el remot; per això és preferible acordar missatges clars abans de compartir-los. Per als commits nous, farem servir missatges breus i descriptius, per exemple `Afegir component Card` o `Passar diverses props a CardBody`.
+
+## 5. Conceptes treballats fins ara
+
+### Components
+
+Un component és una funció que retorna JSX. En aquest exemple, `App` utilitza `Card`, i `Card` utilitza `CardBody`.
+
+### JSX i fragments
+
+JSX permet descriure la interfície amb una sintaxi semblant a HTML dins de JavaScript. Un component ha de retornar un únic element arrel; els fragments (`<>...</>`) agrupen elements sense afegir un node extra al document.
+
+### Props
+
+Les props són les dades que el component pare passa al component fill. A l’exemple, `CardBody` rep `title`, `subtitle` i `text`. També es poden desempaquetar directament al paràmetre:
+
+```jsx
+function CardBody({ title, subtitle, text }) {
+  return (
+    <>
+      <h5>{title}</h5>
+      <h6>{subtitle}</h6>
+      <p>{text}</p>
+    </>
+  );
+}
+```
+
+## 6. Continguts previstos
+
+Afegirem aquesta secció a mesura que es desenvolupin els passos corresponents a classe:
+
+1. **`children`**: posar contingut entre l’etiqueta d’obertura i la de tancament d’un component i llegir-lo des de `props.children`.
+2. **Llistes**: renderitzar una col·lecció de dades i assignar una `key` estable a cada element.
+3. **Esdeveniments**: respondre a accions de l’usuari, per exemple amb `onClick` i una funció manejadora.
+4. **Estat**: utilitzar `useState` per conservar dades que canvien i actualitzar la interfície quan canvien.
+5. **Exercici del botó**: aplicar esdeveniments i estat per reproduir les dues captures següents. Aquest exercici es completarà per separat de l’exemple guiat.
+
+### Exercici: canviar l’estat d’un botó
+
+Construeix una targeta amb Bootstrap que mostri el mateix resultat que les captures. La interfície té un títol (`Hola món`), un text (`Això és el text`), una llista amb `Zelda`, `Link`, `Impa`, `Prunia` i `Riju` (amb `Link` seleccionat), i un botó.
+
+![Estat inicial: el botó blau mostra «Hola»](ExempleButtonCaptura1.png)
+
+Quan es prem el botó, ha de canviar a l’estat que es veu a la segona captura:
+
+![Després de prémer: el botó desactivat i gris mostra «Loading...»](ExempleButtonCaptura2.png)
+
+**Requisits:**
+
+- El botó comença habilitat, de color blau i amb el text `Hola`.
+- En fer-hi clic, el text passa a ser `Loading...` i el botó queda desactivat i gris.
+- El canvi s’ha de fer amb estat de React (`useState`) i un manejador d’esdeveniment (`onClick`); no s’ha de modificar el DOM directament.
+- La targeta, el text i la llista han de continuar visibles després del clic.
+
+**Pistes:** importa `useState` de React; guarda a l’estat si s’ha premut el botó; fes servir aquesta dada per decidir-ne el text i l’atribut `disabled`. A Bootstrap, la llista es pot construir amb `list-group` i `list-group-item`, i l’element seleccionat amb `active`.
+
+## 7. Referències
+
+- [Documentació oficial de React](https://react.dev/learn)
+- [Referència de `useState`](https://react.dev/reference/react/useState)
+- [Documentació de Vite](https://vite.dev/guide/)
